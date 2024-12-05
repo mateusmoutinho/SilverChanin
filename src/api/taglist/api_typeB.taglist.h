@@ -6,6 +6,6 @@
 
 
 typedef struct{
-    Tag **tags;
+    private_SilverChain_Tag **tags;
     int size;
-} TagList;
+} private_SilverChain_TagList;

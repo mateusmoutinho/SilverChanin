@@ -4,8 +4,8 @@
 #include "../../imports/imports.api_consts.h"
 //silver_chain_scope_end
 
-typedef  struct Tag{
+typedef  struct private_SilverChain_Tag{
     char *name;
     int priority;
     DtwStringArray *itens;
-}Tag;
+}private_SilverChain_Tag;

@@ -4,21 +4,21 @@
 #include "../../imports/imports.api_declare.h"
 //silver_chain_scope_end
 
-Tag *newTag(const char *name,int priority){
-    Tag *self = (Tag*)malloc(sizeof(Tag));
-    *self = (Tag){0};
+private_SilverChain_Tag *private_SilverChain_newTag(const char *name,int priority){
+    private_SilverChain_Tag *self = (private_SilverChain_Tag*)malloc(sizeof(private_SilverChain_Tag));
+    *self = (private_SilverChain_Tag){0};
     self->name = strdup(name);
     self->priority = priority;
     self->itens = newDtwStringArray();
     return self;
 }
 
-void Tag_add_file(Tag *self,const char *file){
+void private_SilverChain_Tag_add_file(private_SilverChain_Tag *self,const char *file){
     DtwStringArray_append(self->itens,file);
 }
 
-void Tag_create_module_file(
-    Tag *self,
+void private_SilverChain_Tag_create_module_file(
+    private_SilverChain_Tag *self,
     CTextStack *final_text_path,
     const char *prev_module,
     const char *project_short_cut
@@ -49,11 +49,11 @@ void Tag_create_module_file(
     CTextStack_format(final_text,"#endif\n");
 
 
-    write_element_if_not_equal(final_text_path->rendered_text,final_text->rendered_text);
+    private_SilverChain_write_element_if_not_equal(final_text_path->rendered_text,final_text->rendered_text);
     UniversalGarbage_free(garbage);
 
 }
-int  replace_import_file(const char *current_file_path,const char *module_path){
+int  private_SilverChain_replace_import_file(const char *current_file_path,const char *module_path){
     UniversalGarbage *garbage = newUniversalGarbage();
     int end_scope_size = (int)strlen(SILVER_CHAIN_END_SCOPE);
     CTextStack *relative_path = make_relative_path(current_file_path,module_path);
@@ -76,7 +76,7 @@ int  replace_import_file(const char *current_file_path,const char *module_path){
     if(start_scope_index == -1){
         //means its not implemented
         CTextStack_self_insert_at(file_content_stack,0,text_to_insert->rendered_text);
-        write_element_if_not_equal(current_file_path,file_content_stack->rendered_text);
+        private_SilverChain_write_element_if_not_equal(current_file_path,file_content_stack->rendered_text);
         UniversalGarbage_free(garbage);
         return SILVER_CHAIN_OK;
     }
@@ -90,14 +90,14 @@ int  replace_import_file(const char *current_file_path,const char *module_path){
     //replace the content
     CTextStack_self_pop(file_content_stack,start_scope_index,end_scope_index+end_scope_size-1);
     CTextStack_self_insert_at(file_content_stack,start_scope_index,text_to_insert->rendered_text);
-    write_element_if_not_equal(current_file_path,file_content_stack->rendered_text);
+    private_SilverChain_write_element_if_not_equal(current_file_path,file_content_stack->rendered_text);
     UniversalGarbage_free(garbage);
     return SILVER_CHAIN_OK;
 }
 
 
-void Tag_replace_import_in_files(
-    Tag *self,
+void private_SilverChain_Tag_replace_import_in_files(
+    private_SilverChain_Tag *self,
     const char *module_dir,
     const char *prev
 ){
@@ -111,14 +111,14 @@ void Tag_replace_import_in_files(
     CTextStack_format(module_path,"%s/%s.%s.h",module_dir,IMPORT_NAME,prev);
     for(int i = 0; i < self->itens->size;i++){
         char *current_file_path = self->itens->strings[i];
-        replace_import_file(current_file_path,module_path->rendered_text);
+        private_SilverChain_replace_import_file(current_file_path,module_path->rendered_text);
     }
     UniversalGarbage_free(garbage);
 }
 
 
-void Tag_implement(
-    Tag *self,
+void private_SilverChain_Tag_implement(
+    private_SilverChain_Tag *self,
     const char *module_dir,
     const char *project_short_cut,
     const char *prev
@@ -128,13 +128,13 @@ void Tag_implement(
     UniversalGarbage_add(garbage,CTextStack_free,import_module_file_path);
     CTextStack_format(import_module_file_path,"%s/%s.%s.h",module_dir,IMPORT_NAME,self->name);
 
-    Tag_create_module_file(self,import_module_file_path,prev,project_short_cut);
-    Tag_replace_import_in_files(self,module_dir,prev);
+    private_SilverChain_Tag_create_module_file(self,import_module_file_path,prev,project_short_cut);
+    private_SilverChain_Tag_replace_import_in_files(self,module_dir,prev);
     UniversalGarbage_free(garbage);
 }
 
 
-void Tag_free(Tag *self){
+void private_SilverChain_Tag_free(private_SilverChain_Tag *self){
     free(self->name);
     DtwStringArray_free(self->itens);
     free(self);

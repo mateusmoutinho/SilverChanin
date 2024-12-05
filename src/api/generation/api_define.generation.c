@@ -4,7 +4,7 @@
 #include "../../imports/imports.api_declare.h"
 //silver_chain_scope_end
 
-char *get_main_path(DtwStringArray *src_listage,char *main_name){
+char *private_SilverChain_get_main_path(DtwStringArray *src_listage,char *main_name){
     UniversalGarbage *garbage = newUniversalGarbage();
      DtwPath *path = NULL;
      UniversalGarbage_add(garbage,DtwPath_free,path);
@@ -35,17 +35,17 @@ char *get_main_path(DtwStringArray *src_listage,char *main_name){
     UniversalGarbage_free(garbage);
     return NULL;
 }
-void generate_main(
+void private_SilverChain_generate_main(
     DtwStringArray *src_listage,
     const char *import_dir,
-    TagList *itens,
+    private_SilverChain_TagList *itens,
     char *main_name,
     const char *main_path
 
 ){
     const char *found_main_path = main_path;
     if(main_path == NULL){
-        found_main_path = get_main_path(src_listage,main_name);
+        found_main_path = private_SilverChain_get_main_path(src_listage,main_name);
     }
 
     if(found_main_path == NULL){
@@ -53,19 +53,19 @@ void generate_main(
     }
 
     UniversalGarbage *garbage = newUniversalGarbage();
-    Tag *last_tag = itens->tags[itens->size - 1];
+    private_SilverChain_Tag *last_tag = itens->tags[itens->size - 1];
     char *prev = last_tag->name;
 
     CTextStack *module_path = newCTextStack_string_empty();
     UniversalGarbage_add(garbage,CTextStack_free,module_path);
 
     CTextStack_format(module_path,"%s/%s.%s.h",import_dir,IMPORT_NAME,prev);
-    replace_import_file(found_main_path,module_path->rendered_text);
+    private_SilverChain_replace_import_file(found_main_path,module_path->rendered_text);
     UniversalGarbage_free(garbage);
 
 }
 
-void generate_code(
+void SilverChain_generate_code(
     const char *src,
     const char *import_dir,
     const char *project_short_cut,
@@ -90,8 +90,8 @@ void generate_code(
     CTextStack *name_stack = NULL;
     UniversalGarbage_add(garbage,CTextStack_free,name_stack);
 
-    TagList *itens = newTagList();
-    UniversalGarbage_add(garbage,TagList_free,itens);
+    private_SilverChain_TagList *itens = private_SilverChain_newTagList();
+    UniversalGarbage_add(garbage,private_SilverChain_TagList_free,itens);
 
     for(int i = 0; i <src_listage->size;i++){
         char *current = src_listage->strings[i];
@@ -107,21 +107,21 @@ void generate_code(
 
         int tag_index = get_tag_index(tags,name_stack->rendered_text);
         if(tag_index != -1){
-            TagList_add_item(itens,name_stack->rendered_text,current,tag_index);
+            private_SilverChain_TagList_add_item(itens,name_stack->rendered_text,current,tag_index);
         }
 
     }
 
-    TagList_implement(itens,import_dir,project_short_cut);
+    private_SilverChain_TagList_implement(itens,import_dir,project_short_cut);
     if(implement_main){
-       generate_main(src_listage,import_dir,itens,main_name,main_path);
+       private_SilverChain_generate_main(src_listage,import_dir,itens,main_name,main_path);
     }
 
     UniversalGarbage_free(garbage);
 }
 
 
-void generate_code_in_watch_mode(
+void SilverChain_generate_code_in_watch_mode(
     const char *src,
     const char *import_dir,
     const char *project_short_cut,
@@ -135,7 +135,7 @@ void generate_code_in_watch_mode(
 
 ){
     char *first = NULL;
-    generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
+    SilverChain_generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
     if(whatch_message){
         printf("%s\n",whatch_message);
     }
@@ -154,7 +154,7 @@ void generate_code_in_watch_mode(
                 printf("%s\n",remaking_message);
             }
 
-            generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
+            SilverChain_generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
             if(whatch_message){
                 printf("%s\n",whatch_message);
             }

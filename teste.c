@@ -1,7 +1,16 @@
 
 #include <stdio.h>
-int main(){
-    const char *test  = "my name is %s\n";
+static void b();
 
-    printf(test,"mateus");
+
+static void a(){
+    printf("chamou:a\n");
+    b();
+}
+static void b(){
+    printf("chamou:b\n");
+
+}
+int main(){
+    a();
 }

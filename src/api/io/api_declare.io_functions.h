@@ -4,4 +4,4 @@
 #include "../../imports/imports.api_typeB.h"
 //silver_chain_scope_end
 
-void write_element_if_not_equal(const char *path,const char *content);
+void private_SilverChain_write_element_if_not_equal(const char *path,const char *content);

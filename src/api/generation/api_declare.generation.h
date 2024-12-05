@@ -5,19 +5,19 @@
 //silver_chain_scope_end
 
 
-char *get_main_path(DtwStringArray *src_listage,char *main_name);
+char *private_SilverChain_get_main_path(DtwStringArray *src_listage,char *main_name);
 
-void generate_main(
+void private_SilverChain_generate_main(
     DtwStringArray *src_listage,
     const char *import_dir,
-    TagList *itens,
+    private_SilverChain_TagList *itens,
     char *main_name,
     const char *main_path
 
 );
 
 
-void generate_code(
+void SilverChain_generate_code(
     const char *src,
     const char *import_dir,
     const char *project_short_cut,
@@ -27,7 +27,7 @@ void generate_code(
     const char *main_path
     );
 
-void generate_code_in_watch_mode(
+void SilverChain_generate_code_in_watch_mode(
         const char *src,
         const char *import_dir,
         const char *project_short_cut,

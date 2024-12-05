@@ -5,15 +5,15 @@
 //silver_chain_scope_end
 
 
-TagList *newTagList(){
-    TagList *self = (TagList*)malloc(sizeof(TagList));
-    *self = (TagList){0};
-    self->tags = (Tag**)malloc(0);
+private_SilverChain_TagList *private_SilverChain_newTagList(){
+    private_SilverChain_TagList *self = (private_SilverChain_TagList*)malloc(sizeof(private_SilverChain_TagList));
+    *self = (private_SilverChain_TagList){0};
+    self->tags = (private_SilverChain_Tag**)malloc(0);
     return self;
 }
-Tag * TagList_find_tag_element(TagList *self,const char *tag){
+private_SilverChain_Tag * private_SilverChain_TagList_find_tag_element(private_SilverChain_TagList *self,const char *tag){
     for(int i = 0; i < self->size;i++){
-        Tag *current = self->tags[i];
+        private_SilverChain_Tag *current = self->tags[i];
         if(strcmp(current->name, tag) == 0){
             return current;
         }
@@ -21,21 +21,21 @@ Tag * TagList_find_tag_element(TagList *self,const char *tag){
     return NULL;
 }
 
-void TagList_add_item(TagList *self, const char *tag,const char *path,int priority){
-    Tag *tag_to_add = TagList_find_tag_element(self,tag);
+void private_SilverChain_TagList_add_item(private_SilverChain_TagList *self, const char *tag,const char *path,int priority){
+    private_SilverChain_Tag *tag_to_add = private_SilverChain_TagList_find_tag_element(self,tag);
     if(tag_to_add == NULL){
-        tag_to_add = newTag(tag,priority);
-        self->tags = (Tag**)realloc(self->tags, (self->size +1) * sizeof(Tag**));
+        tag_to_add = private_SilverChain_newTag(tag,priority);
+        self->tags = (private_SilverChain_Tag**)realloc(self->tags, (self->size +1) * sizeof(private_SilverChain_Tag**));
         self->tags[self->size] = tag_to_add;
         self->size+=1;
     }
-    Tag_add_file(tag_to_add,path);
+    private_SilverChain_Tag_add_file(tag_to_add,path);
 
 }
 
-int TagList_ordanate_tag_by_priority(const void *tag1,const void *tag2){
-    Tag *t1 = *(Tag**)tag1;
-    Tag *t2 = *(Tag**)tag2;
+int private_SilverChain_TagList_ordanate_tag_by_priority(const void *tag1,const void *tag2){
+    private_SilverChain_Tag *t1 = *(private_SilverChain_Tag**)tag1;
+    private_SilverChain_Tag *t2 = *(private_SilverChain_Tag**)tag2;
     if(t1->priority > t2->priority){
         return 1;
     }
@@ -46,26 +46,26 @@ int TagList_ordanate_tag_by_priority(const void *tag1,const void *tag2){
     //ordenate by alphabet
     return strcmp(t1->name,t2->name);
 }
-void TagList_implement(TagList *self,const char *point,const char *project_short_cut){
+void private_SilverChain_TagList_implement(private_SilverChain_TagList *self,const char *point,const char *project_short_cut){
 
 
-    qsort(self->tags, self->size, sizeof(Tag*), TagList_ordanate_tag_by_priority);
+    qsort(self->tags, self->size, sizeof(private_SilverChain_Tag*), private_SilverChain_TagList_ordanate_tag_by_priority);
 
     for(int i = 0; i < self->size;i++){
-        Tag *current = self->tags[i];
+        private_SilverChain_Tag *current = self->tags[i];
         char *prev = NULL;
         if(i > 0){
             prev = self->tags[i-1]->name;
         }
 
-        Tag_implement(current,point,project_short_cut,prev);
+        private_SilverChain_Tag_implement(current,point,project_short_cut,prev);
     }
 }
 
-void TagList_free(TagList *self){
+void private_SilverChain_TagList_free(private_SilverChain_TagList *self){
     for(int i = 0; i < self->size;i++){
-        Tag *current = self->tags[i];
-        Tag_free(current);
+        private_SilverChain_Tag *current = self->tags[i];
+        private_SilverChain_Tag_free(current);
     }
     free(self->tags);
     free(self);
