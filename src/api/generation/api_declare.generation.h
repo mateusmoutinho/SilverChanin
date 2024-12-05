@@ -27,4 +27,16 @@ void generate_code(
     const char *main_path
     );
 
-void generate_code_in_watch_mode(const char *src,const char *import_dir,const char *project_short_cut,DtwStringArray *tags,bool implement_main,char *main_name,const char *main_path,int sleep_time);
+void generate_code_in_watch_mode(
+        const char *src,
+        const char *import_dir,
+        const char *project_short_cut,
+        DtwStringArray *tags,
+        bool implement_main,
+        char *main_name,
+        const char *main_path,
+        int sleep_time,
+        const char *whatch_message,
+        const char *remaking_message
+
+);

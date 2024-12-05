@@ -7,14 +7,14 @@
 char *get_main_path(DtwStringArray *src_listage,char *main_name){
     UniversalGarbage *garbage = newUniversalGarbage();
      DtwPath *path = NULL;
-     UniversalGarbage_add(garbage,dtw.path.free,path);
+     UniversalGarbage_add(garbage,DtwPath_free,path);
     for(int i = 0; i < src_listage->size;i++){
         char *current = src_listage->strings[i];
 
-        path = dtw.path.newPath(current);
+        path = newDtwPath(current);
         UniversalGarbage_resset(garbage,path);
 
-        char *current_name = dtw.path.get_full_name(path);
+        char *current_name = DtwPath_get_full_name(path);
         if(main_name != NULL){
             if(strcmp(current_name,main_name) == 0){
                 UniversalGarbage_free(garbage);
@@ -56,10 +56,10 @@ void generate_main(
     Tag *last_tag = itens->tags[itens->size - 1];
     char *prev = last_tag->name;
 
-    CTextStack *module_path = stack.newStack_string_empty();
-    UniversalGarbage_add(garbage,stack.free,module_path);
+    CTextStack *module_path = newCTextStack_string_empty();
+    UniversalGarbage_add(garbage,CTextStack_free,module_path);
 
-    stack.format(module_path,"%s/%s.%s.h",import_dir,IMPORT_NAME,prev);
+    CTextStack_format(module_path,"%s/%s.%s.h",import_dir,IMPORT_NAME,prev);
     replace_import_file(found_main_path,module_path->rendered_text);
     UniversalGarbage_free(garbage);
 
@@ -76,34 +76,34 @@ void generate_code(
     ){
 
 
-    dtw.remove_any(import_dir);
+    dtw_remove_any(import_dir);
     UniversalGarbage *garbage = newUniversalGarbage();
-    DtwStringArray *src_listage = dtw.list_files_recursively(src,true);
+    DtwStringArray *src_listage = dtw_list_files_recursively(src,true);
     //grants previsbility
-    dtw.string_array.sort(src_listage);
+    DtwStringArray_sort(src_listage);
 
-    UniversalGarbage_add(garbage,dtw.string_array.free,src_listage);
+    UniversalGarbage_add(garbage,DtwStringArray_free,src_listage);
 
     DtwPath *path =NULL;
-    UniversalGarbage_add(garbage,dtw.path.free,path);
+    UniversalGarbage_add(garbage,DtwPath_free,path);
 
     CTextStack *name_stack = NULL;
-    UniversalGarbage_add(garbage,stack.free,name_stack);
+    UniversalGarbage_add(garbage,CTextStack_free,name_stack);
 
     TagList *itens = newTagList();
     UniversalGarbage_add(garbage,TagList_free,itens);
 
     for(int i = 0; i <src_listage->size;i++){
         char *current = src_listage->strings[i];
-        path = dtw.path.newPath(current);
+        path = newDtwPath(current);
         UniversalGarbage_resset(garbage,path);
 
-        char *name = dtw.path.get_name(path);
-        name_stack = stack.newStack_string(name);
+        char *name = DtwPath_get_name(path);
+        name_stack = newCTextStack_string(name);
         UniversalGarbage_resset(garbage,name_stack);
 
-        int first_dot = stack.index_of_char(name_stack,'.');
-        stack.self_substr(name_stack,0,first_dot);
+        int first_dot = CTextStack_index_of_char(name_stack,'.');
+        CTextStack_self_substr(name_stack,0,first_dot);
 
         int tag_index = get_tag_index(tags,name_stack->rendered_text);
         if(tag_index != -1){
@@ -120,33 +120,53 @@ void generate_code(
     UniversalGarbage_free(garbage);
 }
 
-void generate_code_in_watch_mode(const char *src,const char *import_dir,const char *project_short_cut,DtwStringArray *tags,bool implement_main,char *main_name,const char *main_path,int sleep_time){
+
+void generate_code_in_watch_mode(
+    const char *src,
+    const char *import_dir,
+    const char *project_short_cut,
+    DtwStringArray *tags,
+    bool implement_main,
+    char *main_name,
+    const char *main_path,
+    int sleep_time,
+    const char *whatch_message,
+    const char *remaking_message,
+
+){
     char *first = NULL;
-     printf(MAKING_PROJECT_MESSAGE);
     generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
-    printf(WATCHING_FILES_MESSAGE);
+    if(whatch_message){
+        printf("%s\n",whatch_message);
+    }
+
     while (true) {
-        DtwHash *hash = dtw.hash.newHash();
-        dtw.hash.digest_folder_by_content(hash,src);
+        DtwHash *hash =newDtwHash();
+        DtwHash_digest_folder_by_content(hash,src);
         if(first == NULL){
             first = strdup(hash->hash);
-            dtw.hash.free(hash);
+            DtwHash_free(hash);
             continue;
         }
 
         if(strcmp(hash->hash,first) != 0){
-            printf(REMAKING_PROJECT_MESSAGE);
+            if(remaking_message){
+                printf("%s\n",remaking_message);
+            }
+
             generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
-            printf(WATCHING_FILES_MESSAGE);
+            if(whatch_message){
+                printf("%s\n",whatch_message);
+            }
             free(first);
             first = NULL;
         }
-        dtw.hash.free(hash);
+        DtwHash_free(hash);
         if(sleep_time > 0){
             sleep(sleep_time);
         }
     }
-    
+
     if(first != NULL){
         free(first);
     }

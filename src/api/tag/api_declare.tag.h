@@ -17,7 +17,7 @@ void Tag_create_module_file(
     const char *project_short_cut
 );
 
-void replace_import_file(const char *current_file_path,const char *module_path);
+int  replace_import_file(const char *current_file_path,const char *module_path);
 
 void Tag_replace_import_in_files(
     Tag *self,

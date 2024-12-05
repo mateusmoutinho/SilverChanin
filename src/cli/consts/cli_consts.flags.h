@@ -1,7 +1,7 @@
 
 //silver_chain_scope_start
 //mannaged by silver chain
-#include "../imports/imports.dependenciesB.h"
+#include "../../imports/imports.api_define.h"
 //silver_chain_scope_end
 
 #define SRC_FLAG "s | src | source"

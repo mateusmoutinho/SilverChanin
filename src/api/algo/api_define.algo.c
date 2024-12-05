@@ -23,9 +23,9 @@ int  get_tag_index(DtwStringArray *tags,const char *name){
 int count_path_levels(const char *path){
     UniversalGarbage *garbage = newUniversalGarbage();
 
-    CTextStack *path_stack = stack.newStack_string(path);
-    UniversalGarbage_add(garbage,stack.free,path_stack);
-    stack.self_replace(path_stack,"//","/");
+    CTextStack *path_stack = newCTextStack_string(path);
+    UniversalGarbage_add(garbage,CTextStack_free,path_stack);
+    CTextStack_self_replace(path_stack,"//","/");
 
     int count = 0;
     for(int i = 0; i < path_stack->size; i++){
@@ -44,13 +44,13 @@ CTextStack * make_relative_path(
 ){
 
     UniversalGarbage *garbage = newUniversalGarbage();
-    CTextStack *formmated_current_path = stack.newStack_string(current_file);
-    UniversalGarbage_add(garbage,stack.free,formmated_current_path);
+    CTextStack *formmated_current_path = newCTextStack_string(current_file);
+    UniversalGarbage_add(garbage,CTextStack_free,formmated_current_path);
 
-    stack.self_replace(formmated_current_path,"//","/");
-    CTextStack *formmated_dest_path = stack.newStack_string(dest_file);
-    UniversalGarbage_add(garbage,stack.free,formmated_dest_path);
-    stack.self_replace(formmated_dest_path,"//","/");
+   CTextStack_self_replace(formmated_current_path,"//","/");
+    CTextStack *formmated_dest_path = newCTextStack_string(dest_file);
+    UniversalGarbage_add(garbage,CTextStack_free,formmated_dest_path);
+   CTextStack_self_replace(formmated_dest_path,"//","/");
 
     int lower_size = 0;
     if(formmated_current_path->size > formmated_dest_path->size){
@@ -72,16 +72,16 @@ CTextStack * make_relative_path(
     }
 
     if(count_to_substract > 0){
-        stack.self_pop(formmated_current_path,0,count_to_substract-1);
-        stack.self_pop(formmated_dest_path,0,count_to_substract-1);
+        CTextStack_self_pop(formmated_current_path,0,count_to_substract-1);
+        CTextStack_self_pop(formmated_dest_path,0,count_to_substract-1);
     }
     int dirs_to_add = count_path_levels(formmated_current_path->rendered_text);
-    CTextStack *final_path = stack.newStack_string_empty();
+    CTextStack *final_path = newCTextStack_string_empty();
 
     for(int i = 0; i < dirs_to_add; i++){
-        stack.text(final_path,"../");
+        CTextStack_text(final_path,"../");
     }
-    stack.text(final_path,formmated_dest_path->rendered_text);
+    CTextStack_text(final_path,formmated_dest_path->rendered_text);
     //printf("current = %s\n",formmated_current_path->rendered_text);
     //printf("formmated =%s\n",formmated_dest_path->rendered_text);
 
