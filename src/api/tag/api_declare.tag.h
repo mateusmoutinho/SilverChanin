@@ -1,7 +1,7 @@
 
 //silver_chain_scope_start
 //mannaged by silver chain
-#include "../../imports/imports.api_typeB.h"
+#include "../../imports/imports.api_types.h"
 //silver_chain_scope_end
 
 

@@ -1,4 +1,4 @@
-#include "imports.api_define.h"
+#include "imports.cli_dependencies.h"
 #ifndef silverchain_cli_consts
 #define silverchain_cli_consts
 #include "../cli/consts/cli_consts.app.h"

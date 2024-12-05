@@ -1,16 +1,10 @@
 
-#include <stdio.h>
-static void b();
 
+void parse_upper(char *value);
 
-static void a(){
-    printf("chamou:a\n");
-    b();
-}
-static void b(){
-    printf("chamou:b\n");
+void convert_non_assci(char *value);
 
-}
-int main(){
-    a();
+void format_str(char *str){
+    parse_upper(str);
+    convert_non_assci(str);
 }

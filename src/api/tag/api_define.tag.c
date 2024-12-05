@@ -40,7 +40,7 @@ void private_SilverChain_Tag_create_module_file(
    UniversalGarbage_add(garbage,CTextStack_free,relative_path);
     for(int i = 0; i < self->itens->size;i++){
         char *current_file = self->itens->strings[i];
-        relative_path = make_relative_path(final_text_path->rendered_text,current_file);
+        relative_path = private_SilverChain_make_relative_path(final_text_path->rendered_text,current_file);
         UniversalGarbage_resset(garbage,relative_path);
         CTextStack_format(final_text,"#include \"%t\"\n",relative_path);
 
@@ -56,7 +56,7 @@ void private_SilverChain_Tag_create_module_file(
 int  private_SilverChain_replace_import_file(const char *current_file_path,const char *module_path){
     UniversalGarbage *garbage = newUniversalGarbage();
     int end_scope_size = (int)strlen(SILVER_CHAIN_END_SCOPE);
-    CTextStack *relative_path = make_relative_path(current_file_path,module_path);
+    CTextStack *relative_path = private_SilverChain_make_relative_path(current_file_path,module_path);
     UniversalGarbage_add(garbage,CTextStack_free,relative_path);
 
     CTextStack *text_to_insert = newCTextStack_string(SILVER_CHAIN_START_SCOPE);

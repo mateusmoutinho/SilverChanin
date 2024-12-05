@@ -6,7 +6,7 @@
 
 
 
-int  get_tag_index(DtwStringArray *tags,const char *name){
+int  private_SilverChain_get_tag_index(DtwStringArray *tags,const char *name){
 
     for(int i = 0; i < tags->size; i++){
 
@@ -20,7 +20,7 @@ int  get_tag_index(DtwStringArray *tags,const char *name){
 }
 
 
-int count_path_levels(const char *path){
+int private_SilverChain_count_path_levels(const char *path){
     UniversalGarbage *garbage = newUniversalGarbage();
 
     CTextStack *path_stack = newCTextStack_string(path);
@@ -38,7 +38,7 @@ int count_path_levels(const char *path){
 }
 
 
-CTextStack * make_relative_path(
+CTextStack * private_SilverChain_make_relative_path(
     const char *current_file,
     const char *dest_file
 ){
@@ -75,7 +75,7 @@ CTextStack * make_relative_path(
         CTextStack_self_pop(formmated_current_path,0,count_to_substract-1);
         CTextStack_self_pop(formmated_dest_path,0,count_to_substract-1);
     }
-    int dirs_to_add = count_path_levels(formmated_current_path->rendered_text);
+    int dirs_to_add = private_SilverChain_count_path_levels(formmated_current_path->rendered_text);
     CTextStack *final_path = newCTextStack_string_empty();
 
     for(int i = 0; i < dirs_to_add; i++){
@@ -93,24 +93,4 @@ CTextStack * make_relative_path(
 
 
 
-}
-
-FlagColision flag_collides(DtwStringArray *flags){
-    FlagColision colision = {false,NULL,NULL};
-    for(int i = 0; i < flags->size; i++){
-        char *current_flag = flags->strings[i];
-        for(int j = 0; j < flags->size; j++){
-            if(i == j){
-                continue;
-            }
-            char *current_flag2 = flags->strings[j];
-            if(dtw_starts_with(current_flag2,current_flag)){
-                colision.collides = true;
-                colision.flag_colliding = current_flag;
-                colision.flag_colliding_with = current_flag2;
-                return colision;
-            }
-        }
-    }
-    return colision;
 }

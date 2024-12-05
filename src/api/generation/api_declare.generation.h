@@ -1,7 +1,7 @@
 
 //silver_chain_scope_start
 //mannaged by silver chain
-#include "../../imports/imports.api_typeB.h"
+#include "../../imports/imports.api_types.h"
 //silver_chain_scope_end
 
 
@@ -21,7 +21,7 @@ void SilverChain_generate_code(
     const char *src,
     const char *import_dir,
     const char *project_short_cut,
-    DtwStringArray * tags,
+    SilverChainStringArray * tags,
     bool implement_main,
     char *main_name,
     const char *main_path
@@ -31,7 +31,7 @@ void SilverChain_generate_code_in_watch_mode(
         const char *src,
         const char *import_dir,
         const char *project_short_cut,
-        DtwStringArray *tags,
+        SilverChainStringArray *tags,
         bool implement_main,
         char *main_name,
         const char *main_path,

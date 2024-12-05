@@ -1,7 +1,7 @@
 
 //silver_chain_scope_start
 //mannaged by silver chain
-#include "../imports/imports.cli_globals.h"
+#include "../imports/imports.cli_define.h"
 //silver_chain_scope_end
 
 
@@ -66,12 +66,12 @@ int main(int argc,char *argv[]){
     }
 
 
-    DtwStringArray *tags = newDtwStringArray();
-    UniversalGarbage_add(garbage,dtw.string_array.free,tags);
+    SilverChainStringArray *tags = newSilverChainStringArray();
+    UniversalGarbage_add(garbage,SilverChainStringArray_free,tags);
 
     for(int i = 0; i < tag_flags->size;i++){
         char *tag = cli.flag.get_str(tag_flags,i,CLI_CASE_SENSITIVE);
-        dtw.string_array.append(tags,tag);
+        SilverChainStringArray_append(tags,tag);
     }
 
     FlagColision possible_colision = flag_collides(tags);

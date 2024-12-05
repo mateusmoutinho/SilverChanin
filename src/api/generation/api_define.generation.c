@@ -69,7 +69,7 @@ void SilverChain_generate_code(
     const char *src,
     const char *import_dir,
     const char *project_short_cut,
-    DtwStringArray * tags,
+    SilverChainStringArray * tags,
     bool implement_main,
     char *main_name,
     const char *main_path
@@ -105,7 +105,7 @@ void SilverChain_generate_code(
         int first_dot = CTextStack_index_of_char(name_stack,'.');
         CTextStack_self_substr(name_stack,0,first_dot);
 
-        int tag_index = get_tag_index(tags,name_stack->rendered_text);
+        int tag_index = private_SilverChain_get_tag_index((DtwStringArray*)tags,name_stack->rendered_text);
         if(tag_index != -1){
             private_SilverChain_TagList_add_item(itens,name_stack->rendered_text,current,tag_index);
         }
@@ -125,7 +125,7 @@ void SilverChain_generate_code_in_watch_mode(
     const char *src,
     const char *import_dir,
     const char *project_short_cut,
-    DtwStringArray *tags,
+    SilverChainStringArray *tags,
     bool implement_main,
     char *main_name,
     const char *main_path,
