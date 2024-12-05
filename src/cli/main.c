@@ -80,7 +80,7 @@ int main(int argc,char *argv[]){
         UniversalGarbage_free(garbage);
         return 1;
     }
-    
+
     CliFlag *project_short_cut_flag = cli.entry.get_flag(entry,PROJECT_SHORT_CUT_FLAG,CLI_NOT_CASE_SENSITIVE);
     const char *project_short_cut = PROJECT_SHORT_CUT_DEFAULT;
 
@@ -111,7 +111,7 @@ int main(int argc,char *argv[]){
         if(sleep_time_flag->exist){
             sleep_time = cli.flag.get_long(sleep_time_flag,0);
         }
-        generate_code_in_watch_mode(src,imports,project_short_cut,tags,implement_main,main_name,main_path,sleep_time);
+        generate_code_in_watch_mode(src,imports,project_short_cut,tags,implement_main,main_name,main_path,sleep_time,WATCHING_FILES_MESSAGE,REMAKING_PROJECT_MESSAGE);
     }
 
     if(!watch_flag->exist){

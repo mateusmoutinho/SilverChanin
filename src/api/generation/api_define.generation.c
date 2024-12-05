@@ -131,7 +131,7 @@ void generate_code_in_watch_mode(
     const char *main_path,
     int sleep_time,
     const char *whatch_message,
-    const char *remaking_message,
+    const char *remaking_message
 
 ){
     char *first = NULL;
