@@ -1,4 +1,9 @@
 
+//silver_chain_scope_start
+//mannaged by silver chain
+#include "../../imports/imports.api_typeB.h"
+//silver_chain_scope_end
+
 
 int  get_tag_index(DtwStringArray *tags,const char *name);
 
