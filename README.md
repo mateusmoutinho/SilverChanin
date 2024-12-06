@@ -6,22 +6,20 @@ SilverChain is a unified import model for C, it allows you to import modules and
 [video explanation](https://www.youtube.com/watch?v=mU4QbZATKfo)
 
 ## Build
-if you want to build the project you need to have a C compiler,clonate the repository and run the following command:
+for building the project you can just type the following command (note that you must have a gcc compiler for it)
 ```bash
-gcc src/main.c  -o silverchain.out
+curl -L https://github.com/OUIsolutions/SilverChain/releases/download/v0.07/SilverChain.c -o SilverChain.c &&
+gcc SilverChain.c -o SilverChain.o
 ```
 
-## PreCompiled Version
-download the [silverchain.out](https://github.com/OUIsolutions/SilverChain/releases/download/v0.05/silverchain.out) or
-[silverchain.exe](https://github.com/OUIsolutions/SilverChain/releases/download/v0.05/silverchain.exe)
-file and put it in your project folder
+
 
 
 ##  Usage
 this will generate a folder called "imports" with all the imports and their dependencies, and a main.c file with the main function and the imports.
 
 ```bash
-./silverchain.out -src <src_folder> -tags <tag1> <tag2> <tag3> ... <tagN>
+./SilverChain.o -src <src_folder> -tags <tag1> <tag2> <tag3> ... <tagN>
 ```
 
 ## Flags
@@ -51,7 +49,7 @@ the first tag its "dependencies" so all the files that starts with "dependencies
 each tag can visualize the all the ancestors tags, for example:
 
 ```bash
-./silverchain.out -src src -tags dependencies consts types globals func_declaration func_definition
+./SilverChain.o -src src -tags dependencies consts types globals func_declaration func_definition
 ```
 
 in this case the "func_declaration" and "func_definition" tags will see the "dependencies" and "consts" .
