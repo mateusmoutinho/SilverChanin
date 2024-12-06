@@ -6,6 +6,10 @@
 #include "../api/error/api_define.error.c"
 #include "../api/generation/api_define.generation.c"
 #include "../api/io/api_define.io_functions.c"
+#include "../api/namespace/error/api_define.error.c"
+#include "../api/namespace/generators/api_define.generator.c"
+#include "../api/namespace/namespace/api_define.namespace.c"
+#include "../api/namespace/string_array/api_define.string_array.c"
 #include "../api/tag/api_define.tag.c"
 #include "../api/taglist/api_define.taglist.c"
 #endif

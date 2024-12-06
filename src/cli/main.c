@@ -11,6 +11,7 @@ int main(int argc,char *argv[]){
     dtw = newDtwNamespace();
     stack = newCTextStackModule();
     cli = newCliNamespace();
+    silverchain = newSilverChainNamespace();
     UniversalGarbage *garbage = newUniversalGarbage();
 
     CliEntry *entry = newCliEntry(argc,argv);
@@ -66,12 +67,12 @@ int main(int argc,char *argv[]){
     }
 
 
-    SilverChainStringArray *tags = newSilverChainStringArray();
-    UniversalGarbage_add(garbage,SilverChainStringArray_free,tags);
+    SilverChainStringArray *tags = silverchain.string_array.create();
+    UniversalGarbage_add(garbage,silverchain.string_array.free,tags);
 
     for(int i = 0; i < tag_flags->size;i++){
         char *tag = cli.flag.get_str(tag_flags,i,CLI_CASE_SENSITIVE);
-        SilverChainStringArray_append(tags,tag);
+        silverchain.string_array.append(tags,tag);
     }
 
     FlagColision possible_colision = flag_collides(tags);
@@ -111,11 +112,11 @@ int main(int argc,char *argv[]){
         if(sleep_time_flag->exist){
             sleep_time = cli.flag.get_long(sleep_time_flag,0);
         }
-        SilverChain_generate_code_in_watch_mode(src,imports,project_short_cut,tags,implement_main,main_name,main_path,sleep_time);
+        silverchain.generator.generate_code_in_watch_mode(src,imports,project_short_cut,tags,implement_main,main_name,main_path,sleep_time);
     }
 
     if(!watch_flag->exist){
-        SilverChain_generate_code(src,imports,project_short_cut,tags,implement_main,main_name,main_path);
+        silverchain.generator.generate_code(src,imports,project_short_cut,tags,implement_main,main_name,main_path);
     }
 
     UniversalGarbage_free(garbage);
