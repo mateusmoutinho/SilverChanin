@@ -5,7 +5,7 @@
 //silver_chain_scope_end
 
 
-SilverChainError *private_SilverChain_newSilverChainError(int error_code,const char *error_path, char *error_msg,...){
+SilverChainError *private_SilverChain_newSilverChainError(int error_code,const char *error_path, const char *error_msg,...){
     SilverChainError *self = (SilverChainError*)malloc(sizeof(SilverChainError));
     *self = (SilverChainError){0};
     self->error_code = error_code;
