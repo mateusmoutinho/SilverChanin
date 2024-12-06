@@ -120,23 +120,28 @@ SilverChainError * SilverChain_generate_code(
       error =  private_SilverChain_generate_main(src_listage,import_dir,itens,main_name,main_path);
     }
 
-    DtwStringArray * valid_import_dirs  = newDtwStringArray();
-    UniversalGarbage_add(garbage, DtwStringArray_free, valid_import_dirs);
-    for(int i = 0;i < tags->size; i++){
-        char *formmated_str  = private_dtw_formatt("imports.%s.h",tags->strings[i]);
-        DtwStringArray_append_getting_ownership(valid_import_dirs, formmated_str);
-    }
 
 
-    DtwStringArray * import_files = dtw_list_files_recursively(import_dir, DTW_NOT_CONCAT_PATH);
+
+    DtwStringArray * import_files = dtw_list_files_recursively(import_dir, DTW_CONCAT_PATH);
     for(int i = 0; i < import_files->size;i++){
+        UniversalGarbage *internal_garbage = newUniversalGarbage();
         char *current_file = import_files->strings[i];
-        bool valid = private_SilverChain_get_tag_index(valid_import_dirs,current_file) != -1;
-        if(!valid){
-            char *current_file_path = dtw_concat_path(import_dir,current_file);
-            dtw_remove_any(current_file_path);
-            free(current_file);
+        DtwPath *current_path = newDtwPath(current_file);
+        UniversalGarbage_add(garbage, DtwPath_free, current_path);
+        char *full_name = DtwPath_get_full_name(current_path);
+
+        if(!dtw_starts_with(full_name, "imports")){
+
+            dtw_remove_any(current_file);
+            UniversalGarbage_free(internal_garbage);
+            continue;
         }
+
+
+
+       // bool valid = private_SilverChain_get_tag_index(valid_import_dirs,current_file) != -1;
+       UniversalGarbage_free(internal_garbage);
     }
 
 
