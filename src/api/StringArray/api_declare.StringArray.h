@@ -4,7 +4,6 @@
 #include "../../imports/imports.api_typesC.h"
 //silver_chain_scope_end
 
-typedef  struct StringArray SilverChainStringArray ;
 
 SilverChainStringArray * newSilverChainStringArray();
 
