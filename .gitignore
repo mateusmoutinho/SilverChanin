@@ -1,7 +1,7 @@
 # Prerequisites
 *.d
- CAmalgamator.c
- SilverChain.c
+CAmalgamator.c
+SilverChain.c
 release
 teste.c
 dependencies
