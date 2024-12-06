@@ -128,20 +128,27 @@ SilverChainError * SilverChain_generate_code(
         UniversalGarbage *internal_garbage = newUniversalGarbage();
         char *current_file = import_files->strings[i];
         DtwPath *current_path = newDtwPath(current_file);
-        UniversalGarbage_add(garbage, DtwPath_free, current_path);
+        UniversalGarbage_add(internal_garbage, DtwPath_free, current_path);
         char *full_name = DtwPath_get_full_name(current_path);
 
-        if(!dtw_starts_with(full_name, "imports")){
-
+        if(!dtw_starts_with(full_name, "imports.")){
+            dtw_remove_any(current_file);
+            UniversalGarbage_free(internal_garbage);
+            continue;
+        }
+        CTextArray * itens = CTextArray_split(full_name,".");
+        UniversalGarbage_add(internal_garbage, CTextArray_free, itens);
+        if(itens->size != 3){
             dtw_remove_any(current_file);
             UniversalGarbage_free(internal_garbage);
             continue;
         }
 
-
-
-       // bool valid = private_SilverChain_get_tag_index(valid_import_dirs,current_file) != -1;
-       UniversalGarbage_free(internal_garbage);
+        bool tag_valid = private_SilverChain_get_tag_index(tags,itens->stacks[1]->rendered_text) != -1;
+        if(!tag_valid){
+            dtw_remove_any(current_file);
+        }
+        UniversalGarbage_free(internal_garbage);
     }
 
 
