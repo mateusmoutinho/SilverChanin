@@ -11,7 +11,11 @@ for building the project you can just type the following command (note that you 
 curl -L https://github.com/OUIsolutions/SilverChain/releases/download/v0.07/SilverChain.c -o SilverChain.c &&
 gcc SilverChain.c -o SilverChain.o
 ```
-
+## Build From scratch
+if you want to build from scracth , you just need to clone the repo, then call:
+```shell
+sh install_dependencies.sh && sh build.sh
+```
 
 
 
