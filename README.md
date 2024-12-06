@@ -16,7 +16,7 @@ if you want to build from scracth , you just need to clone the repo, then call:
 ```shell
 sh install_dependencies.sh && sh build.sh
 ```
-
+it will generate all the outputs in the **release* folder
 
 
 ##  Usage
