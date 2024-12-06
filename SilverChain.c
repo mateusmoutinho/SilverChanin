@@ -1,9 +1,8 @@
 
-//#define  CAMALGAMATOR_DEBUG
 //silver_chain_scope_start
 //mannaged by silver chain
-#ifndef camalgamator_api_dependencies
-#define camalgamator_api_dependencies
+#ifndef silverchain_api_dependencies
+#define silverchain_api_dependencies
 
 #ifndef  CTEXTENGINE_H
 #ifndef  CTEXTENGINE_H
@@ -16092,39 +16091,15 @@ void UniversalGarbage_free(UniversalGarbage *self){
 
 #endif
 
-#ifndef camalgamator_api_const
-#define camalgamator_api_const
+#ifndef silverchain_api_consts
+#define silverchain_api_consts
 
 //silver_chain_scope_start
 //mannaged by silver chain
 
 //silver_chain_scope_end
-#define  PRIVATE_CAMALGAMATOR_NO_ERRORS 0
-#define  CAMALGAMATOR_FILE_NOT_FOUND_OR_ITS_NOT_CORRECTED_FORMATED -1
-
-#define  CAMALGAMATOR_UNEXPECTED_ERROR -2
-#define CAMALGAMATOR_MAX_CONTENT_SIZE -3
-#define CAMALGAMATOR_MAX_RECURSION_CALL -4
-
-
-//silver_chain_scope_start
-//mannaged by silver chain
-
-//silver_chain_scope_end
-
-#define CAMALGAMATOR_DONT_INCLUDE 1
-#define CAMALGAMATOR_DONT_CHANGE 2
-#define CAMALGAMATOR_INCLUDE_ONCE 3
-#define CAMALGAMATOR_INCLUDE_PERPETUAL 4
-
-
-//silver_chain_scope_start
-//mannaged by silver chain
-
-//silver_chain_scope_end
-
-#define CAMALGAMATOR_ONE_KBYTE 1024
-#define CAMALGAMATOR_ONE_MB CAMALGAMATOR_ONE_KBYTE * 1000
+#define SILVER_CHAIN_END_SCOPE_NOT_PROVIDED 1
+#define SILVER_CHAIN_NOT_FOUND -1
 
 
 //silver_chain_scope_start
@@ -16133,20 +16108,30 @@ void UniversalGarbage_free(UniversalGarbage *self){
 //silver_chain_scope_end
 
 
-enum{
-    PRIVATE_CAMALGAMATOR_NORMAL_STATE,
-    PRIVATE_CAMALGAMATOR_WATING_FILENAME_STRING_START,
-    PRIVATE_CAMALGAMATOR_COLLECTING_FILENAME,
-    PRIVATE_CAMALGAMATOR_INSIDE_INLINE_COMENT,
-    PRIVATE_CAMALGAMATOR_INSIDE_MULTILINE_COMENT,
-    PRIVATE_CAMALGAMATOR_INSIDE_NORMAL_STRING,
-    PRIVATE_CAMALGAMATOR_INSIDE_CHAR
-};
+const char * IMPORT_NAME = "imports";
+const char *  MANAGED_SYSTEM =  "//mannaged by silver chain\n";
+const char *  SILVER_CHAIN_START_SCOPE = "\n//silver_chain_scope_start\n";
+const char *  SILVER_CHAIN_END_SCOPE = "//silver_chain_scope_end\n";
+const char *  PROJECT_SHORT_CUT_DEFAULT = "silverchain";
+const char *  DEFAULT_MAIN_C_NAME  = "main.c";
+const char *  DEFAULT_MAIN_CPP_NAME  =  "main.cpp";
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+const char *  SILVER_CHAIN_FILE_NOT_PROVIDED_ERROR_MESSAGE = "\033[31mfile %s not provides  end scope\n\033[0m";
+const char * SILVER_CHAIN_REMAKING_PROJECT_MESSAGE  = "\033[34mRemaking the project...\033[0m";
+const char *  SILVER_CHAIN_WATCHING_FILES_MESSAGE = "\033[33mWatching files...\033[0m";
+const char *  SILVER_CHAIN_MAKING_PROJECT_MESSAGE =  "\033[34mMaking the project...\033[0m";
 
 #endif
 
-#ifndef camalgamator_api_type
-#define camalgamator_api_type
+#ifndef silverchain_api_type
+#define silverchain_api_type
 
 //silver_chain_scope_start
 //mannaged by silver chain
@@ -16154,172 +16139,916 @@ enum{
 //silver_chain_scope_end
 
 
-struct CAmalgamatorErrorOrContent{
-    char *content;
-    int error;
+
+typedef struct{
+    bool collides;
+    char *flag_colliding;
+    char *flag_colliding_with;
+}FlagColision;
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+typedef struct SilverChainError{
+    int error_code;
+    char *error_path;
     char *error_msg;
-    char *include_name;
-    char *filename;
-};
-typedef  struct CAmalgamatorErrorOrContent CAmalgamatorErrorOrContent;
+}SilverChainError;
 
-#endif
-
-#ifndef camalgamator_api_type1
-#define camalgamator_api_type1
 
 //silver_chain_scope_start
 //mannaged by silver chain
 
 //silver_chain_scope_end
 
-struct CAmalgamatorNamesapce{
+typedef  struct private_SilverChain_Tag{
+    char *name;
+    int priority;
+    DtwStringArray *itens;
+}private_SilverChain_Tag;
 
-    CAmalgamatorErrorOrContent * (*generate_amalgamation)(
-        const char*filename,
-        long max_content_size,
-        int max_recursion,
-        short (*generator_handler)(const char *filename,const  char *path, void *extra_args),
-        void *args
+#endif
+
+#ifndef silverchain_api_typeB
+#define silverchain_api_typeB
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+typedef struct{
+    private_SilverChain_Tag **tags;
+    int size;
+} private_SilverChain_TagList;
+
+#endif
+
+#ifndef silverchain_api_types
+#define silverchain_api_types
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+typedef  struct DtwStringArray SilverChainStringArray ;
+
+#endif
+
+#ifndef silverchain_api_typesB
+#define silverchain_api_typesB
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+typedef struct SilverChainErrorNamespace{
+    void (*free)(SilverChainError *self);
+
+}SilverChainErrorNamespace;
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+typedef struct SilverChainGeneratorNamespace{
+
+    SilverChainError * (*generate_code)(
+        const char *src,
+        const char *import_dir,
+        const char *project_short_cut,
+        SilverChainStringArray * tags,
+        bool implement_main,
+        const char *main_name,
+        const char *main_path
+        );
+
+    void (*generate_code_in_watch_mode)(
+            const char *src,
+            const char *import_dir,
+            const char *project_short_cut,
+            SilverChainStringArray *tags,
+            bool implement_main,
+            const char *main_name,
+            const char *main_path,
+            int sleep_time
     );
-    CAmalgamatorErrorOrContent * (*generate_amalgamation_simple)(const char*filename, long maxcontent_size, int max_recursion);
 
-    short DONT_INCLUDE;
-    short DONT_CHANGE;
-    short INCLUDE_ONCE;
-    short INCLUDE_PERPETUAL;
-    short FILE_NOT_FOUND;
-    short UNEXPECTED_ERROR;
-    short NO_ERRORS;
-    int ONE_KBYTE;
-    int  ONE_MB;
+} SilverChainGeneratorNamespace;
 
-    void (*free_error_or_string)(CAmalgamatorErrorOrContent *self);
 
-};
-typedef   struct  CAmalgamatorNamesapce CAmalgamatorNamesapce;
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+typedef struct SilverChainStringArrayNamespace{
+    SilverChainStringArray * (*create)();
+    void (*append)(SilverChainStringArray *self,const char *value);
+    void (*free)(SilverChainStringArray *self);
+
+} SilverChainStringArrayNamespace;
 
 #endif
 
-#ifndef camalgamator_api_declare
-#define camalgamator_api_declare
+#ifndef silverchain_api_typesC
+#define silverchain_api_typesC
 
 //silver_chain_scope_start
 //mannaged by silver chain
 
 //silver_chain_scope_end
 
-
-CAmalgamatorErrorOrContent * Private_new_CAmalgamatorErrorOrString_as_error(int error_code,char *include_name,char *filename, const char *error_msg,...);
-
-
-CAmalgamatorErrorOrContent * Private_new_CAmalgamatorErrorOrString_as_ok(char *content);
-
-void CAmalgamatorErrorOrString_free(CAmalgamatorErrorOrContent *self);
-
-
-//silver_chain_scope_start
-//mannaged by silver chain
-
-//silver_chain_scope_end
-CAmalgamatorErrorOrContent * CAmalgamator_generate_amalgamation(
-    const char*filename,
-    long max_content_size,
-    int max_recursion,
-    short (*generator_handler)(const char *filename,const  char *path, void *extra_args),
-    void *args
-);
-
-CAmalgamatorErrorOrContent * CAmalgamator_generate_amalgamation_simple(const char*filename,long max_content_size,    int max_recursion);
-
-
-//silver_chain_scope_start
-//mannaged by silver chain
-
-//silver_chain_scope_end
-
-CAmalgamatorNamesapce newCAmalgamatorNamesapce();
-
-
-//silver_chain_scope_start
-//mannaged by silver chain
-
-//silver_chain_scope_end
-
-bool private_CAmalgamator_is_include_at_point(char *content,int content_size,int point);
-
-bool private_CAmalgamator_is_start_multiline_coment_at_point(char *content,int content_size,int point);
-
-bool private_CAmalgamator_is_end_multiline_coment_at_point(char *content,int content_size,int point);
-
-bool private_CAmalgamator_is_start_inline_coment_at_point(char *content,int content_size,int point);
-
-
-//silver_chain_scope_start
-//mannaged by silver chain
-
-//silver_chain_scope_end
-
-
-int  private_CAmalgamator_generate_amalgamation(
-    const char *prev_file,
-    const char *include_code,
-    CTextStack * final,
-    DtwStringArray *already_included,
-    char **include_code_error,
-    char **filename_errr,
-    long max_content_size,
-    int recursion_call,
-    int max_recursion,
-    short (*generator_handler)(const char *filename,const  char *import_name, void *extra_args),
-    void *args
-);
+typedef struct SilverChainNamespace{
+    SilverChainGeneratorNamespace generator;
+    SilverChainErrorNamespace error;
+    SilverChainStringArrayNamespace string_array;
+}SilverChainNamespace;
 
 #endif
 
-#ifndef camalgamator_api_define
-#define camalgamator_api_define
+#ifndef silverchain_api_declare
+#define silverchain_api_declare
 
 //silver_chain_scope_start
 //mannaged by silver chain
 
 //silver_chain_scope_end
 
-CAmalgamatorErrorOrContent * Private_new_CAmalgamatorErrorOrString_as_error(int error_code,char *include_name,char *filename, const char *error_msg,...){
-    CAmalgamatorErrorOrContent *self = (CAmalgamatorErrorOrContent*)malloc(sizeof(CAmalgamatorErrorOrContent));
-    *self = (CAmalgamatorErrorOrContent){0};
-    self->error = error_code;
+
+SilverChainStringArray * newSilverChainStringArray();
+
+void SilverChainStringArray_append(SilverChainStringArray *self,const char *value);
+
+void SilverChainStringArray_free(SilverChainStringArray *self);
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+int  private_SilverChain_get_tag_index(DtwStringArray *tags,const char *name);
+
+double private_SilverChain_get_tag_priority(DtwStringArray *tags,const char *name);
+
+int private_SilverChain_count_path_levels(const char *path);
+
+
+CTextStack * private_SilverChain_make_relative_path(
+    const char *current_file,
+    const char *dest_file
+);
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+SilverChainError *private_SilverChain_newSilverChainError(int error_code,const char *error_path,const  char *error_msg,...);
+
+void SilverChainError_free(SilverChainError *self);
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+char *private_SilverChain_get_main_path(DtwStringArray *src_listage,const char *main_name);
+
+SilverChainError * private_SilverChain_generate_main(
+    DtwStringArray *src_listage,
+    const char *import_dir,
+    private_SilverChain_TagList *itens,
+   const  char *main_name,
+    const char *main_path
+
+);
+
+
+SilverChainError * SilverChain_generate_code(
+    const char *src,
+    const char *import_dir,
+    const char *project_short_cut,
+    SilverChainStringArray * tags,
+    bool implement_main,
+    const char *main_name,
+    const char *main_path
+    );
+
+void SilverChain_generate_code_in_watch_mode(
+        const char *src,
+        const char *import_dir,
+        const char *project_short_cut,
+        SilverChainStringArray *tags,
+        bool implement_main,
+        const char *main_name,
+        const char *main_path,
+        int sleep_time
+);
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+void private_SilverChain_write_element_if_not_equal(const char *path,const char *content);
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+SilverChainErrorNamespace newSilverChainErrorNamespace();
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+SilverChainGeneratorNamespace newSilverChainGeneratorNamespace();
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+SilverChainNamespace newSilverChainNamespace();
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+SilverChainStringArrayNamespace newSilverChainStringArrayNamespace();
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+private_SilverChain_Tag *private_SilverChain_newTag(const char *name,int priority);
+
+
+void private_SilverChain_Tag_add_file(private_SilverChain_Tag *self,const char *file);
+
+void private_SilverChain_Tag_create_module_file(
+    private_SilverChain_Tag *self,
+    CTextStack *final_text_path,
+    const char *prev_module,
+    const char *project_short_cut
+);
+
+SilverChainError *   private_SilverChain_replace_import_file(const char *current_file_path,const char *module_path);
+
+SilverChainError * private_SilverChain_Tag_replace_import_in_files(
+    private_SilverChain_Tag *self,
+    const char *module_dir,
+    const char *prev
+);
+
+
+
+SilverChainError *   private_SilverChain_Tag_implement(
+    private_SilverChain_Tag *self,
+    const char *module_dir,
+    const char *project_short_cut,
+    const char *prev
+);
+
+
+
+void private_SilverChain_Tag_free(private_SilverChain_Tag *self);
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+private_SilverChain_TagList *private_SilverChain_newTagList();
+
+private_SilverChain_Tag * private_SilverChain_TagList_find_tag_element(private_SilverChain_TagList *self,const char *tag);
+
+
+int private_SilverChain_TagList_ordanate_tag_by_priority(const void *tag1,const void *tag2);
+
+void private_SilverChain_TagList_add_item(private_SilverChain_TagList *self, const char *tag,const char *path,int priority);
+
+SilverChainError *   private_SilverChain_TagList_implement(private_SilverChain_TagList *self,const char *point,const char *project_short_cut);
+
+void private_SilverChain_TagList_free(private_SilverChain_TagList *self);
+
+#endif
+
+#ifndef silverchain_api_define
+#define silverchain_api_define
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+SilverChainStringArray * newSilverChainStringArray(){
+    return newDtwStringArray();
+}
+void SilverChainStringArray_append(SilverChainStringArray *self,const char *value){
+    DtwStringArray_append(self,value);
+}
+
+void SilverChainStringArray_free(SilverChainStringArray *self){
+    DtwStringArray_free(self);
+}
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+
+int  private_SilverChain_get_tag_index(DtwStringArray *tags,const char *name){
+
+    for(int i = 0; i < tags->size; i++){
+
+        char *current_tag = tags->strings[i];
+        if(dtw_starts_with(name,current_tag)){
+            return i;
+        }
+
+    }
+    return SILVER_CHAIN_NOT_FOUND;
+}
+
+
+int private_SilverChain_count_path_levels(const char *path){
+    UniversalGarbage *garbage = newUniversalGarbage();
+
+    CTextStack *path_stack = newCTextStack_string(path);
+    UniversalGarbage_add(garbage,CTextStack_free,path_stack);
+    CTextStack_self_replace(path_stack,"//","/");
+
+    int count = 0;
+    for(int i = 0; i < path_stack->size; i++){
+        if(path_stack->rendered_text[i] == '/'){
+            count++;
+        }
+    }
+    UniversalGarbage_free(garbage);
+    return count;
+}
+
+
+CTextStack * private_SilverChain_make_relative_path(
+    const char *current_file,
+    const char *dest_file
+){
+
+    UniversalGarbage *garbage = newUniversalGarbage();
+    CTextStack *formmated_current_path = newCTextStack_string(current_file);
+    UniversalGarbage_add(garbage,CTextStack_free,formmated_current_path);
+
+   CTextStack_self_replace(formmated_current_path,"//","/");
+    CTextStack *formmated_dest_path = newCTextStack_string(dest_file);
+    UniversalGarbage_add(garbage,CTextStack_free,formmated_dest_path);
+   CTextStack_self_replace(formmated_dest_path,"//","/");
+
+    int lower_size = 0;
+    if(formmated_current_path->size > formmated_dest_path->size){
+        lower_size = formmated_dest_path->size;
+    }else{
+        lower_size = formmated_current_path->size;
+    }
+
+    int count_to_substract = 1;
+    while (count_to_substract < lower_size){
+        if(formmated_current_path->rendered_text[count_to_substract] != formmated_dest_path->rendered_text[count_to_substract]){
+
+            if(formmated_current_path->rendered_text[count_to_substract-1] != '/' || formmated_dest_path->rendered_text[count_to_substract-1] != '/'){
+                count_to_substract =0;
+            }
+            break;
+        }
+        count_to_substract+=1;
+    }
+
+    if(count_to_substract > 0){
+        CTextStack_self_pop(formmated_current_path,0,count_to_substract-1);
+        CTextStack_self_pop(formmated_dest_path,0,count_to_substract-1);
+    }
+    int dirs_to_add = private_SilverChain_count_path_levels(formmated_current_path->rendered_text);
+    CTextStack *final_path = newCTextStack_string_empty();
+
+    for(int i = 0; i < dirs_to_add; i++){
+        CTextStack_text(final_path,"../");
+    }
+    CTextStack_text(final_path,formmated_dest_path->rendered_text);
+    //printf("current = %s\n",formmated_current_path->rendered_text);
+    //printf("formmated =%s\n",formmated_dest_path->rendered_text);
+
+    UniversalGarbage_free(garbage);
+    return final_path;
+
+
+
+
+
+
+}
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+SilverChainError *private_SilverChain_newSilverChainError(int error_code,const char *error_path, const char *error_msg,...){
+    SilverChainError *self = (SilverChainError*)malloc(sizeof(SilverChainError));
+    *self = (SilverChainError){0};
+    self->error_code = error_code;
     va_list args;
     va_start(args, error_msg);
     self->error_msg = private_dtw_format_vaarg(error_msg,args);
     va_end(args);
-    self->include_name = include_name;
-    self->filename = filename;
+
+    if(error_path){
+        self->error_path = strdup(error_path);
+    }
+    return self;
+}
+
+void SilverChainError_free(SilverChainError *self){
+    free(self->error_msg);
+    if(self->error_path){
+        free(self->error_path);
+    }
+    free(self);
+}
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+char *private_SilverChain_get_main_path(DtwStringArray *src_listage,const char *main_name){
+    UniversalGarbage *garbage = newUniversalGarbage();
+     DtwPath *path = NULL;
+     UniversalGarbage_add(garbage,DtwPath_free,path);
+    for(int i = 0; i < src_listage->size;i++){
+        char *current = src_listage->strings[i];
+
+        path = newDtwPath(current);
+        UniversalGarbage_resset(garbage,path);
+
+        char *current_name = DtwPath_get_full_name(path);
+        if(main_name != NULL){
+            if(strcmp(current_name,main_name) == 0){
+                UniversalGarbage_free(garbage);
+                return current;
+            }
+        }
+        if(main_name == NULL){
+            if(strcmp(current_name,DEFAULT_MAIN_C_NAME) == 0){
+                UniversalGarbage_free(garbage);
+                return current;
+            }
+            if(strcmp(current_name,DEFAULT_MAIN_CPP_NAME) == 0){
+                UniversalGarbage_free(garbage);
+                return current;
+            }
+        }
+    }
+    UniversalGarbage_free(garbage);
+    return NULL;
+}
+SilverChainError * private_SilverChain_generate_main(
+    DtwStringArray *src_listage,
+    const char *import_dir,
+    private_SilverChain_TagList *itens,
+   const  char *main_name,
+    const char *main_path
+
+){
+    const char *found_main_path = main_path;
+    if(main_path == NULL){
+        found_main_path = private_SilverChain_get_main_path(src_listage,main_name);
+    }
+
+    if(found_main_path == NULL){
+        return NULL;
+    }
+
+    UniversalGarbage *garbage = newUniversalGarbage();
+    private_SilverChain_Tag *last_tag = itens->tags[itens->size - 1];
+    char *prev = last_tag->name;
+
+    CTextStack *module_path = newCTextStack_string_empty();
+    UniversalGarbage_add(garbage,CTextStack_free,module_path);
+
+    CTextStack_format(module_path,"%s/%s.%s.h",import_dir,IMPORT_NAME,prev);
+    SilverChainError *error = private_SilverChain_replace_import_file(found_main_path,module_path->rendered_text);
+    UniversalGarbage_free(garbage);
+    return error;
+}
+
+SilverChainError * SilverChain_generate_code(
+    const char *src,
+    const char *import_dir,
+    const char *project_short_cut,
+    SilverChainStringArray * tags,
+    bool implement_main,
+    const char *main_name,
+    const char *main_path
+    ){
+
+
+    UniversalGarbage *garbage = newUniversalGarbage();
+    DtwStringArray *src_listage = dtw_list_files_recursively(src,true);
+    //grants previsbility
+    DtwStringArray_sort(src_listage);
+
+    UniversalGarbage_add(garbage,DtwStringArray_free,src_listage);
+
+    DtwPath *path =NULL;
+    UniversalGarbage_add(garbage,DtwPath_free,path);
+
+    CTextStack *name_stack = NULL;
+    UniversalGarbage_add(garbage,CTextStack_free,name_stack);
+
+    private_SilverChain_TagList *itens = private_SilverChain_newTagList();
+    UniversalGarbage_add(garbage,private_SilverChain_TagList_free,itens);
+
+    for(int i = 0; i <src_listage->size;i++){
+        char *current = src_listage->strings[i];
+        path = newDtwPath(current);
+        UniversalGarbage_resset(garbage,path);
+
+        char *name = DtwPath_get_name(path);
+        name_stack = newCTextStack_string(name);
+        UniversalGarbage_resset(garbage,name_stack);
+
+        int first_dot = CTextStack_index_of_char(name_stack,'.');
+        CTextStack_self_substr(name_stack,0,first_dot);
+
+        int tag_index = private_SilverChain_get_tag_index((DtwStringArray*)tags,name_stack->rendered_text);
+        if(tag_index != SILVER_CHAIN_NOT_FOUND){
+            private_SilverChain_TagList_add_item(itens,name_stack->rendered_text,current,tag_index);
+        }
+
+    }
+
+    SilverChainError *error =  private_SilverChain_TagList_implement(itens,import_dir,project_short_cut);
+    if(error){
+        UniversalGarbage_free(garbage);
+        return error;
+    }
+    if(implement_main){
+      error =  private_SilverChain_generate_main(src_listage,import_dir,itens,main_name,main_path);
+    }
+
+
+
+
+    DtwStringArray * import_files = dtw_list_files_recursively(import_dir, DTW_CONCAT_PATH);
+    UniversalGarbage_add(garbage, DtwStringArray_free, import_files);
+
+    for(int i = 0; i < import_files->size;i++){
+        UniversalGarbage *internal_garbage = newUniversalGarbage();
+        char *current_file = import_files->strings[i];
+        DtwPath *current_path = newDtwPath(current_file);
+        UniversalGarbage_add(internal_garbage, DtwPath_free, current_path);
+
+        char *full_name = DtwPath_get_full_name(current_path);
+
+        if(!dtw_starts_with(full_name, "imports.")){
+            dtw_remove_any(current_file);
+            UniversalGarbage_free(internal_garbage);
+            continue;
+        }
+        CTextArray * itens = CTextArray_split(full_name,".");
+        UniversalGarbage_add(internal_garbage, CTextArray_free, itens);
+        if(itens->size != 3){
+            dtw_remove_any(current_file);
+            UniversalGarbage_free(internal_garbage);
+            continue;
+        }
+
+        bool tag_valid = private_SilverChain_get_tag_index(tags,itens->stacks[1]->rendered_text) != -1;
+        if(!tag_valid){
+            dtw_remove_any(current_file);
+        }
+        UniversalGarbage_free(internal_garbage);
+    }
+
+
+
+    UniversalGarbage_free(garbage);
+    return error;
+}
+
+
+void  SilverChain_generate_code_in_watch_mode(
+    const char *src,
+    const char *import_dir,
+    const char *project_short_cut,
+    SilverChainStringArray *tags,
+    bool implement_main,
+    const char *main_name,
+    const char *main_path,
+    int sleep_time
+
+){
+    char *first = NULL;
+    SilverChain_generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
+    if(SILVER_CHAIN_WATCHING_FILES_MESSAGE){
+        printf("%s\n",SILVER_CHAIN_WATCHING_FILES_MESSAGE);
+    }
+
+    while (true) {
+        DtwHash *hash =newDtwHash();
+        DtwHash_digest_folder_by_content(hash,src);
+        if(first == NULL){
+            first = strdup(hash->hash);
+            DtwHash_free(hash);
+            continue;
+        }
+
+        if(strcmp(hash->hash,first) != 0){
+            if(SILVER_CHAIN_REMAKING_PROJECT_MESSAGE){
+                printf("%s\n",SILVER_CHAIN_REMAKING_PROJECT_MESSAGE);
+            }
+
+            SilverChainError * error =  SilverChain_generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
+            if(error){
+                printf("%s\n",error->error_msg);
+                SilverChainError_free(error);
+                continue;
+            }
+            if(SILVER_CHAIN_WATCHING_FILES_MESSAGE){
+                printf("%s\n",SILVER_CHAIN_WATCHING_FILES_MESSAGE);
+            }
+
+            free(first);
+            first = NULL;
+        }
+        DtwHash_free(hash);
+        if(sleep_time > 0){
+            sleep(sleep_time);
+        }
+    }
+
+    if(first != NULL){
+        free(first);
+    }
+
+}
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+void private_SilverChain_write_element_if_not_equal(const char *path,const char *content){
+    char *old = dtw_load_string_file_content(path);
+    if(old){
+        if(strcmp(old, content) !=0){
+            dtw_write_string_file_content(path,content);
+        }
+        free(old);
+        return;
+    }
+    dtw_write_string_file_content(path,content);
+
+
+}
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+SilverChainErrorNamespace newSilverChainErrorNamespace(){
+    SilverChainErrorNamespace self ={0};
+    self.free = SilverChainError_free;
+    return self;
+}
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+SilverChainGeneratorNamespace newSilverChainGeneratorNamespace(){
+    SilverChainGeneratorNamespace self = {0};
+    self.generate_code = SilverChain_generate_code;
+    self.generate_code_in_watch_mode = SilverChain_generate_code_in_watch_mode;
+    return self;
+}
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+SilverChainNamespace newSilverChainNamespace(){
+    SilverChainNamespace self = {0};
+    self.error = newSilverChainErrorNamespace();
+    self.generator = newSilverChainGeneratorNamespace();
+    self.string_array = newSilverChainStringArrayNamespace();
     return  self;
 }
 
-CAmalgamatorErrorOrContent * Private_new_CAmalgamatorErrorOrString_as_ok(char *content){
-    CAmalgamatorErrorOrContent *self = (CAmalgamatorErrorOrContent*)malloc(sizeof(CAmalgamatorErrorOrContent));
-    *self = (CAmalgamatorErrorOrContent){0};
-    self->error = PRIVATE_CAMALGAMATOR_NO_ERRORS;
-    self->content = content; //we take the ownership
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+SilverChainStringArrayNamespace newSilverChainStringArrayNamespace(){
+    SilverChainStringArrayNamespace self = {0};
+    self.create  = newSilverChainStringArray;
+    self.append = SilverChainStringArray_append;
+    self.free =SilverChainStringArray_free;
     return  self;
 }
 
-void CAmalgamatorErrorOrString_free(CAmalgamatorErrorOrContent *self){
-    if(self->include_name){
-        free(self->include_name);
-    }
-    if(self->content){
-        free(self->content);
-    }
-    if(self->error_msg){
-        free(self->error_msg);
-    }
-    if(self->filename){
-        free(self->filename);
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+private_SilverChain_Tag *private_SilverChain_newTag(const char *name,int priority){
+    private_SilverChain_Tag *self = (private_SilverChain_Tag*)malloc(sizeof(private_SilverChain_Tag));
+    *self = (private_SilverChain_Tag){0};
+    self->name = strdup(name);
+    self->priority = priority;
+    self->itens = newDtwStringArray();
+    return self;
+}
+
+void private_SilverChain_Tag_add_file(private_SilverChain_Tag *self,const char *file){
+    DtwStringArray_append(self->itens,file);
+}
+
+void private_SilverChain_Tag_create_module_file(
+    private_SilverChain_Tag *self,
+    CTextStack *final_text_path,
+    const char *prev_module,
+    const char *project_short_cut
+){
+
+    UniversalGarbage *garbage = newUniversalGarbage();
+    CTextStack *final_text = newCTextStack_string_empty();
+    UniversalGarbage_add(garbage,CTextStack_free,final_text);
+
+    if(prev_module != NULL){
+            CTextStack_format(final_text,"#include \"%s.%s.h\"\n",IMPORT_NAME, prev_module);
     }
 
+
+    CTextStack_format(final_text,"#ifndef %s_%s\n",project_short_cut,self->name);
+    CTextStack_format(final_text,"#define %s_%s\n",project_short_cut,self->name);
+
+   CTextStack *relative_path = NULL;
+   UniversalGarbage_add(garbage,CTextStack_free,relative_path);
+    for(int i = 0; i < self->itens->size;i++){
+        char *current_file = self->itens->strings[i];
+        relative_path = private_SilverChain_make_relative_path(final_text_path->rendered_text,current_file);
+        UniversalGarbage_resset(garbage,relative_path);
+        CTextStack_format(final_text,"#include \"%t\"\n",relative_path);
+
+    }
+
+    CTextStack_format(final_text,"#endif\n");
+
+
+    private_SilverChain_write_element_if_not_equal(final_text_path->rendered_text,final_text->rendered_text);
+    UniversalGarbage_free(garbage);
+
+}
+SilverChainError *   private_SilverChain_replace_import_file(const char *current_file_path,const char *module_path){
+    UniversalGarbage *garbage = newUniversalGarbage();
+    int end_scope_size = (int)strlen(SILVER_CHAIN_END_SCOPE);
+    CTextStack *relative_path = private_SilverChain_make_relative_path(current_file_path,module_path);
+    UniversalGarbage_add(garbage,CTextStack_free,relative_path);
+
+    CTextStack *text_to_insert = newCTextStack_string(SILVER_CHAIN_START_SCOPE);
+    UniversalGarbage_add(garbage,CTextStack_free,text_to_insert);
+    CTextStack_format(text_to_insert,"%s",MANAGED_SYSTEM);
+    CTextStack_format(text_to_insert,"#include \"%t\"\n",relative_path);
+    CTextStack_text(text_to_insert,SILVER_CHAIN_END_SCOPE);
+
+
+    char *file_content = dtw_load_string_file_content(current_file_path);
+    UniversalGarbage_add_simple(garbage,file_content);
+
+    CTextStack *file_content_stack =newCTextStack_string(file_content);
+    UniversalGarbage_add(garbage,CTextStack_free,file_content_stack);
+
+    int start_scope_index = CTextStack_index_of(file_content_stack,SILVER_CHAIN_START_SCOPE);
+
+    if(start_scope_index == SILVER_CHAIN_NOT_FOUND){
+        CTextStack_self_insert_at(file_content_stack,0,text_to_insert->rendered_text);
+        private_SilverChain_write_element_if_not_equal(current_file_path,file_content_stack->rendered_text);
+        UniversalGarbage_free(garbage);
+        return NULL;
+    }
+
+    int end_scope_index = CTextStack_index_of(file_content_stack,SILVER_CHAIN_END_SCOPE);
+    if(end_scope_index == -1){
+        UniversalGarbage_free(garbage);
+        return private_SilverChain_newSilverChainError(
+            SILVER_CHAIN_END_SCOPE_NOT_PROVIDED,
+            current_file_path,
+            SILVER_CHAIN_FILE_NOT_PROVIDED_ERROR_MESSAGE,
+            current_file_path
+        );
+    }
+
+    //replace the content
+    CTextStack_self_pop(file_content_stack,start_scope_index,end_scope_index+end_scope_size-1);
+    CTextStack_self_insert_at(file_content_stack,start_scope_index,text_to_insert->rendered_text);
+    private_SilverChain_write_element_if_not_equal(current_file_path,file_content_stack->rendered_text);
+    UniversalGarbage_free(garbage);
+    return NULL;
+}
+
+
+ SilverChainError * private_SilverChain_Tag_replace_import_in_files(
+    private_SilverChain_Tag *self,
+    const char *module_dir,
+    const char *prev
+){
+    if(prev == NULL){
+        return NULL;
+    }
+    UniversalGarbage *garbage = newUniversalGarbage();
+    CTextStack *module_path = newCTextStack_string_empty();
+    UniversalGarbage_add(garbage,CTextStack_free,module_path);
+
+    CTextStack_format(module_path,"%s/%s.%s.h",module_dir,IMPORT_NAME,prev);
+    for(int i = 0; i < self->itens->size;i++){
+        char *current_file_path = self->itens->strings[i];
+        SilverChainError *error =  private_SilverChain_replace_import_file(current_file_path,module_path->rendered_text);
+        if(error){
+            UniversalGarbage_free(garbage);
+            return error;
+        }
+    }
+    UniversalGarbage_free(garbage);
+    return NULL;
+}
+
+
+SilverChainError *  private_SilverChain_Tag_implement(
+    private_SilverChain_Tag *self,
+    const char *module_dir,
+    const char *project_short_cut,
+    const char *prev
+){
+    UniversalGarbage *garbage = newUniversalGarbage();
+    CTextStack *import_module_file_path = newCTextStack_string_empty();
+    UniversalGarbage_add(garbage,CTextStack_free,import_module_file_path);
+    CTextStack_format(import_module_file_path,"%s/%s.%s.h",module_dir,IMPORT_NAME,self->name);
+
+    private_SilverChain_Tag_create_module_file(self,import_module_file_path,prev,project_short_cut);
+    SilverChainError *  error =  private_SilverChain_Tag_replace_import_in_files(self,module_dir,prev);
+    UniversalGarbage_free(garbage);
+    return error;
+}
+
+
+void private_SilverChain_Tag_free(private_SilverChain_Tag *self){
+    free(self->name);
+    DtwStringArray_free(self->itens);
     free(self);
 }
 
@@ -16330,439 +17059,89 @@ void CAmalgamatorErrorOrString_free(CAmalgamatorErrorOrContent *self){
 //silver_chain_scope_end
 
 
-
-CAmalgamatorErrorOrContent * CAmalgamator_generate_amalgamation(
-    const char*filename,
-    long max_content_size,
-    int max_recursion,
-    short (*generator_handler)(const char *filename,const  char *path, void *extra_args),
-    void *args
-){
-    CTextStack *final = newCTextStack_string_empty();
-    DtwStringArray *already_included = newDtwStringArray();
-    char *include_error_name = NULL;
-    char *filename_error = NULL;
-    int error  = private_CAmalgamator_generate_amalgamation(
-        filename,
-        NULL, //include code
-        final,
-        already_included,
-        &include_error_name,
-        &filename_error,
-        max_content_size,
-        0, //recursion size
-        max_recursion,
-        generator_handler,
-        args
-    );
-    DtwStringArray_free(already_included);
-    if(error){
-        long size = final->size;
-        CTextStack_free(final);
-
-        if(error == CAMALGAMATOR_FILE_NOT_FOUND_OR_ITS_NOT_CORRECTED_FORMATED && include_error_name){
-            return Private_new_CAmalgamatorErrorOrString_as_error(
-                CAMALGAMATOR_FILE_NOT_FOUND_OR_ITS_NOT_CORRECTED_FORMATED,
-                include_error_name,
-                filename_error,
-                "include:'%s' at file '%s' not found",
-                include_error_name,
-                filename_error
-            );
-        }
-
-        if(error == CAMALGAMATOR_FILE_NOT_FOUND_OR_ITS_NOT_CORRECTED_FORMATED){
-            return Private_new_CAmalgamatorErrorOrString_as_error(
-                CAMALGAMATOR_FILE_NOT_FOUND_OR_ITS_NOT_CORRECTED_FORMATED,
-                NULL,
-                filename_error,
-                "file '%s' not found",
-                filename_error
-            );
-        }
-        if(error == CAMALGAMATOR_MAX_RECURSION_CALL && filename_error){
-            return Private_new_CAmalgamatorErrorOrString_as_error(
-                CAMALGAMATOR_MAX_RECURSION_CALL,
-                include_error_name,
-                filename_error,
-                "mex recursion call of: %d  reached at file '%s'\n"
-                "if these its not a recursion problem on your files, increase the limit by"
-                "typing --maxreq <your_limit>",
-                max_recursion,
-                filename_error
-            );
-        }
-
-        if(error == CAMALGAMATOR_MAX_RECURSION_CALL){
-            return Private_new_CAmalgamatorErrorOrString_as_error(
-                CAMALGAMATOR_MAX_RECURSION_CALL,
-                include_error_name,
-                filename_error,
-                "mex recursion call of: %d  reached \n"
-                "if these its not a problem on your files, increase the limit by"
-                "typing --maxreq <your_limit>",
-                max_recursion
-            );
-        }
-
-        if(error == CAMALGAMATOR_MAX_CONTENT_SIZE && filename_error){
-            return Private_new_CAmalgamatorErrorOrString_as_error(
-                CAMALGAMATOR_MAX_CONTENT_SIZE,
-                include_error_name,
-                filename_error,
-                "reached the max content size of %ld bytes in %ld bytes in file '%s'",
-                max_content_size,
-                size - max_content_size,
-                filename_error
-            );
-        }
-
-        if(error == CAMALGAMATOR_MAX_CONTENT_SIZE){
-            return Private_new_CAmalgamatorErrorOrString_as_error(
-                CAMALGAMATOR_MAX_CONTENT_SIZE,
-                include_error_name,
-                filename_error,
-                "reached the max content size of %ld bytes in %ld bytes",
-                max_content_size,
-                size - max_content_size
-            );
-        }
-
-        return Private_new_CAmalgamatorErrorOrString_as_error(
-                CAMALGAMATOR_UNEXPECTED_ERROR,
-                include_error_name,
-                filename_error,
-                "unexpected behavior"
-        );
-
-    }
-    char *content =  CTextStack_self_transform_in_string_and_self_clear(final);
-    return Private_new_CAmalgamatorErrorOrString_as_ok(content);
-}
-
-CAmalgamatorErrorOrContent * CAmalgamator_generate_amalgamation_simple(const char*filename,long max_content_size,int max_recursion){
-    return CAmalgamator_generate_amalgamation(filename,max_content_size,max_recursion,NULL,NULL);
-}
-
-
-//silver_chain_scope_start
-//mannaged by silver chain
-
-//silver_chain_scope_end
-
-CAmalgamatorNamesapce newCAmalgamatorNamesapce(){
-    CAmalgamatorNamesapce self = {0};
-    self.generate_amalgamation = CAmalgamator_generate_amalgamation;
-    self.generate_amalgamation_simple = CAmalgamator_generate_amalgamation_simple;
-    self.free_error_or_string = CAmalgamatorErrorOrString_free;
-    self.DONT_CHANGE = CAMALGAMATOR_DONT_CHANGE;
-    self.DONT_INCLUDE = CAMALGAMATOR_DONT_INCLUDE;
-    self.INCLUDE_ONCE = CAMALGAMATOR_INCLUDE_ONCE;
-    self.INCLUDE_PERPETUAL= CAMALGAMATOR_INCLUDE_PERPETUAL;
-    self.FILE_NOT_FOUND = PRIVATE_CAMALGAMATOR_WATING_FILENAME_STRING_START;
-    self.UNEXPECTED_ERROR = CAMALGAMATOR_UNEXPECTED_ERROR;
-    self.NO_ERRORS = PRIVATE_CAMALGAMATOR_NO_ERRORS;
-    self.ONE_KBYTE =CAMALGAMATOR_ONE_KBYTE;
-    self.ONE_MB = CAMALGAMATOR_ONE_MB;
-
+private_SilverChain_TagList *private_SilverChain_newTagList(){
+    private_SilverChain_TagList *self = (private_SilverChain_TagList*)malloc(sizeof(private_SilverChain_TagList));
+    *self = (private_SilverChain_TagList){0};
+    self->tags = (private_SilverChain_Tag**)malloc(0);
     return self;
 }
-
-
-//silver_chain_scope_start
-//mannaged by silver chain
-
-//silver_chain_scope_end
-
-#define PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point,char)\
-    if(content[point] != char){\
-    return false;\
-}
-#define PRIVATE_CAMALGAMATOR_STR_SIZE(str) (sizeof(str)-1)
-
-bool private_CAmalgamator_is_include_at_point(char *content,int content_size,int point){
-    if(point + PRIVATE_CAMALGAMATOR_STR_SIZE("#include") >= content_size){
-        return false;
+private_SilverChain_Tag * private_SilverChain_TagList_find_tag_element(private_SilverChain_TagList *self,const char *tag){
+    for(int i = 0; i < self->size;i++){
+        private_SilverChain_Tag *current = self->tags[i];
+        if(strcmp(current->name, tag) == 0){
+            return current;
+        }
     }
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point,'#')
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point+1,'i')
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point+2,'n')
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point+3,'c')
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point+4,'l')
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point+5,'u')
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point+6,'d')
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point+7,'e')
-    return true;
+    return NULL;
 }
 
-bool private_CAmalgamator_is_start_multiline_coment_at_point(char *content,int content_size,int point){
-    if(point + PRIVATE_CAMALGAMATOR_STR_SIZE("/*") >= content_size){
-        return false;
+void private_SilverChain_TagList_add_item(private_SilverChain_TagList *self, const char *tag,const char *path,int priority){
+    private_SilverChain_Tag *tag_to_add = private_SilverChain_TagList_find_tag_element(self,tag);
+    if(tag_to_add == NULL){
+        tag_to_add = private_SilverChain_newTag(tag,priority);
+        self->tags = (private_SilverChain_Tag**)realloc(self->tags, (self->size +1) * sizeof(private_SilverChain_Tag**));
+        self->tags[self->size] = tag_to_add;
+        self->size+=1;
     }
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point,'/')
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point+1,'*')
-    return true;
+    private_SilverChain_Tag_add_file(tag_to_add,path);
+
 }
 
-bool private_CAmalgamator_is_end_multiline_coment_at_point(char *content,int content_size,int point){
-    if(point + PRIVATE_CAMALGAMATOR_STR_SIZE("*/") >= content_size){
-        return false;
+int private_SilverChain_TagList_ordanate_tag_by_priority(const void *tag1,const void *tag2){
+    private_SilverChain_Tag *t1 = *(private_SilverChain_Tag**)tag1;
+    private_SilverChain_Tag *t2 = *(private_SilverChain_Tag**)tag2;
+    if(t1->priority > t2->priority){
+        return 1;
     }
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point,'*')
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point+1,'/')
-    return true;
+    if(t1->priority < t2->priority){
+        return -1;
+    }
+    //printf("%s | %s\n",t1->name,t2->name);;
+    //ordenate by alphabet
+    return strcmp(t1->name,t2->name);
+}
+SilverChainError *   private_SilverChain_TagList_implement(private_SilverChain_TagList *self,const char *point,const char *project_short_cut){
+
+
+    qsort(self->tags, self->size, sizeof(private_SilverChain_Tag*), private_SilverChain_TagList_ordanate_tag_by_priority);
+
+    for(int i = 0; i < self->size;i++){
+        private_SilverChain_Tag *current = self->tags[i];
+        char *prev = NULL;
+        if(i > 0){
+            prev = self->tags[i-1]->name;
+        }
+
+        SilverChainError * error = private_SilverChain_Tag_implement(current,point,project_short_cut,prev);
+        if(error){
+            return error;
+        }
+    }
+    return NULL;
 }
 
-
-bool private_CAmalgamator_is_start_inline_coment_at_point(char *content,int content_size,int point){
-    if(point + PRIVATE_CAMALGAMATOR_STR_SIZE("//") >= content_size){
-        return false;
+void private_SilverChain_TagList_free(private_SilverChain_TagList *self){
+    for(int i = 0; i < self->size;i++){
+        private_SilverChain_Tag *current = self->tags[i];
+        private_SilverChain_Tag_free(current);
     }
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point,'/')
-    PRIVATE_C_AMALGAMATOR_CHECK_CHAR(point+1,'/')
-    return true;
-}
-
-
-//silver_chain_scope_start
-//mannaged by silver chain
-
-//silver_chain_scope_end
-
-#define COLLECT_ERROR_ATTIBUTES \
-if(include_code == NULL){\
-    *filename_errr = strdup(prev_file);\
-}\
-if(include_code){\
-    *include_code_error = strdup(include_code);\
-    *filename_errr = dtw_get_absolute_path(prev_file);\
-}
-
-
-int  private_CAmalgamator_generate_amalgamation(
-    const char *prev_file,
-    const char *include_code,
-    CTextStack * final,
-    DtwStringArray *already_included,
-    char **include_code_error,
-    char **filename_errr,
-    long max_content_size,
-    int recursion_call,
-    int max_recursion,
-    short (*generator_handler)(const char *filename,const  char *import_name, void *extra_args),
-    void *args
-){
-    if(recursion_call >= max_recursion){
-      COLLECT_ERROR_ATTIBUTES
-        return CAMALGAMATOR_MAX_RECURSION_CALL;
-    }
-
-    if(final->size >= max_content_size ){
-        COLLECT_ERROR_ATTIBUTES
-        return CAMALGAMATOR_MAX_CONTENT_SIZE;
-    }
-
-    short behavior = CAMALGAMATOR_INCLUDE_ONCE;
-    char *filename = (char*)prev_file;
-    UniversalGarbage *garbage = newUniversalGarbage();
-
-    DtwPath *current_path = newDtwPath(prev_file);
-    UniversalGarbage_add(garbage,DtwPath_free, current_path);
-    char *dir = DtwPath_get_dir(current_path);
-
-    if(include_code){
-        filename = dtw_concat_path(dir,include_code);
-
-        UniversalGarbage_add_simple(garbage,filename);
-    }
-
-    bool is_binary;
-    long size;
-    char *content = (char*)dtw_load_any_content(filename,&size,&is_binary);
-    UniversalGarbage_add_simple(garbage, content);
-    if(content == NULL || is_binary){
-
-
-        COLLECT_ERROR_ATTIBUTES
-        UniversalGarbage_free(garbage);
-        return CAMALGAMATOR_FILE_NOT_FOUND_OR_ITS_NOT_CORRECTED_FORMATED;
-    }
-
-    if(generator_handler && include_code){
-         behavior  = generator_handler(filename,include_code, args);
-    }
-
-    if(behavior < 0) {
-        COLLECT_ERROR_ATTIBUTES
-        UniversalGarbage_free(garbage);
-        return behavior;
-    }
-
-    if(behavior == CAMALGAMATOR_DONT_INCLUDE){
-        return PRIVATE_CAMALGAMATOR_NO_ERRORS;
-    }
-    if(behavior == CAMALGAMATOR_DONT_CHANGE){
-        CTextStack_format(final,"$include \"%s\"\n", include_code);
-        return PRIVATE_CAMALGAMATOR_NO_ERRORS;
-    }
-
-
-    if(behavior == CAMALGAMATOR_INCLUDE_ONCE){
-        char *absolute = dtw_get_absolute_path(filename);
-        UniversalGarbage_add_simple(garbage, absolute);
-        bool is_already_included =DtwStringArray_find_position(already_included,absolute) != -1;
-        if(is_already_included){
-               UniversalGarbage_free(garbage);
-                return PRIVATE_CAMALGAMATOR_NO_ERRORS;
-        }
-        DtwStringArray_append(already_included, absolute);
-    }
-
-    CTextStack *new_include_code = newCTextStack_string_empty();
-    UniversalGarbage_add(garbage,CTextStack_free,new_include_code);
-
-    int state = PRIVATE_CAMALGAMATOR_NORMAL_STATE;
-    for(int i =0; i < size;i++){
-
-        char current_char = content[i];
-
-        if(state == PRIVATE_CAMALGAMATOR_NORMAL_STATE){
-            bool is_multiline_coment_start = private_CAmalgamator_is_start_multiline_coment_at_point(content,size,i);
-            if(is_multiline_coment_start){
-                state = PRIVATE_CAMALGAMATOR_INSIDE_MULTILINE_COMENT;
-                CTextStack_format(final,"%c",current_char);
-                continue;
-            }
-            bool is_inline_coment_start =  private_CAmalgamator_is_start_inline_coment_at_point(content,size,i);
-            if(is_inline_coment_start){
-                state = PRIVATE_CAMALGAMATOR_INSIDE_INLINE_COMENT;
-                CTextStack_format(final,"%c",current_char);
-                continue;
-            }
-            bool is_str_start = current_char == '"';
-            if(is_str_start){
-                state = PRIVATE_CAMALGAMATOR_INSIDE_NORMAL_STRING;
-                CTextStack_format(final,"%c",current_char);
-                continue;
-            }
-            bool is_char_start = current_char == '\'';
-            if(is_char_start){
-                state = PRIVATE_CAMALGAMATOR_INSIDE_CHAR;
-                CTextStack_format(final,"%c",current_char);
-                continue;
-            }
-            bool is_include = private_CAmalgamator_is_include_at_point(content,size,i);
-            if(is_include){
-                state =PRIVATE_CAMALGAMATOR_WATING_FILENAME_STRING_START;
-                continue; // we dont format include here
-            }
-            CTextStack_format(final,"%c",current_char);
-            continue;
-        }
-
-        if(state == PRIVATE_CAMALGAMATOR_INSIDE_MULTILINE_COMENT ){
-            bool is_multiline_coment_end = private_CAmalgamator_is_end_multiline_coment_at_point(content,size,i);
-            if(is_multiline_coment_end){
-                state = PRIVATE_CAMALGAMATOR_NORMAL_STATE;
-            }
-            CTextStack_format(final,"%c",current_char);
-            continue;
-
-        }
-
-        if(state == PRIVATE_CAMALGAMATOR_INSIDE_INLINE_COMENT){
-            bool is_inline_comment_end = current_char == '\n';
-            if(is_inline_comment_end){
-                state = PRIVATE_CAMALGAMATOR_NORMAL_STATE;
-            }
-
-            CTextStack_format(final,"%c",current_char);
-            continue;
-
-        }
-
-        if(state == PRIVATE_CAMALGAMATOR_INSIDE_NORMAL_STRING){
-            char last_char = content[i-1];
-            bool is_str_end = current_char == '"' && last_char != '\\';
-            if(is_str_end){
-                state = PRIVATE_CAMALGAMATOR_NORMAL_STATE;
-            }
-
-            CTextStack_format(final,"%c",current_char);
-            continue;
-
-        }
-
-        if(state == PRIVATE_CAMALGAMATOR_INSIDE_CHAR){
-            char last_char = content[i-1];
-            bool is_char_end = current_char == '\''&& last_char != '\'';
-            if(is_char_end){
-                state = PRIVATE_CAMALGAMATOR_NORMAL_STATE;
-
-            }
-            CTextStack_format(final,"%c",current_char);
-            continue;
-
-        }
-
-        if(state == PRIVATE_CAMALGAMATOR_WATING_FILENAME_STRING_START){
-            if (current_char == '"'){
-                state = PRIVATE_CAMALGAMATOR_COLLECTING_FILENAME;
-            }
-
-            if(current_char == '<'){
-                state = PRIVATE_CAMALGAMATOR_NORMAL_STATE;
-                //aborts inclusion
-                CTextStack_text(final,"#include <");
-            }
-            continue;
-        }
-
-        if(state == PRIVATE_CAMALGAMATOR_COLLECTING_FILENAME){
-
-            // means its the end of the #include "filename"
-            // so whe have the hle filename stored in
-            // new_include_code->rendered_text
-            if(current_char == '"'){
-                int error = private_CAmalgamator_generate_amalgamation(
-                    filename,
-                    new_include_code->rendered_text,
-                    final,
-                    already_included,
-                    include_code_error,
-                    filename_errr,
-                    max_content_size,
-                    recursion_call+1,
-                    max_recursion,
-                    generator_handler,
-                    args
-                );
-                if(error){
-                        UniversalGarbage_free(garbage);
-                        return error;
-                }
-                CTextStack_restart(new_include_code);
-                state = PRIVATE_CAMALGAMATOR_NORMAL_STATE;
-            }
-
-            else{
-                CTextStack_format(new_include_code,"%c", current_char);
-            }
-        }
-    }
-    UniversalGarbage_free(garbage);
-    return PRIVATE_CAMALGAMATOR_NO_ERRORS;
+    free(self->tags);
+    free(self);
 }
 
 #endif
 
-#ifndef camalgamator_cli_dependencies
-#define camalgamator_cli_dependencies
+#ifndef silverchain_cli_dependencies
+#define silverchain_cli_dependencies
 
 //silver_chain_scope_start
 //mannaged by silver chain
 
 //silver_chain_scope_end
+
+
+
+
 
 
 
@@ -16869,7 +17248,7 @@ SOFTWARE.
 #define CTEXT_TRACK "track"
 #define CTEXT_EMBED "embed"
 #define CTEXT_PARAM "param"
-
+    
 
 
 
@@ -16890,7 +17269,7 @@ typedef struct CTextStack{
     char *rendered_text;
     size_t rendered_text_alocation_size;
     size_t size;
-
+    
     char *line_breaker;
     char *separator;
     int ident_level;
@@ -17591,11 +17970,11 @@ const char * CTextStack_typeof_in_str(struct CTextStack *self){
     else if(current_type == CTEXT_LONG){
         return "long";
     }
-
+    
     else if(current_type == CTEXT_DOUBLE){
         return "double";
     }
-
+    
     else{
         return "invalid";
     }
@@ -17646,14 +18025,14 @@ void CTextStack_text(struct CTextStack *self, const char *text){
     }
 
     size_t text_size = strlen(text);
-
+    
     self->size += text_size;
     private_ctext_text_double_size_if_reachs(self);
-
+    
     memcpy(
             self->rendered_text + self->size - text_size,
         text,
-        text_size
+        text_size 
     );
     self->rendered_text[self->size] = '\0';
 }
@@ -18332,7 +18711,7 @@ void private_CliGarbage_append(privateCliGarbage*self, int type, void *value){
     new_garbage->value = value;
     self->values[self->size] = new_garbage;
     self->size+=1;;
-
+    
 }
 
 void private_cli_free_garbage(privateCliGarbage*self){
@@ -18398,7 +18777,7 @@ CTextStack *private_cli_get_flag_if_its_an_flag(CTextArray *identifiers,CTextSta
 
         if(CTextStack_starts_with(formated_possible_flag,current_identifier->rendered_text)){
             CTextStack_self_substr(formated_possible_flag, (long)current_identifier->size,-1);
-
+            
             return formated_possible_flag;
         }
 
@@ -18533,7 +18912,7 @@ CliEntry * newCliEntry(int argc, char **argv){
     self->private_garbage = private_cli_newGarbageArray();
 
     self->flag_identifiers = " - | -- | --- ";
-
+    
     for(int i = 0; i < argc; i++){
         CTextArray_append_string(self->elements,argv[i]);
     }
@@ -18667,110 +19046,147 @@ CliNamespace newCliNamespace(){
 }
 
 
+
+
 #endif
 
-#ifndef camalgamator_cli_type
-#define camalgamator_cli_type
+#ifndef silverchain_cli_consts
+#define silverchain_cli_consts
 
 //silver_chain_scope_start
 //mannaged by silver chain
 
 //silver_chain_scope_end
 
-struct Behaviors{
-    DtwStringArray *dont_change;
-    DtwStringArray *include_perpetual;
-    DtwStringArray *dont_include;
-};
-typedef  struct Behaviors Behaviors ;
 
-#endif
+#define SLEEP_TIME_DEFAULT 1
 
-#ifndef camalgamator_cli_globals
-#define camalgamator_cli_globals
 
 //silver_chain_scope_start
 //mannaged by silver chain
 
 //silver_chain_scope_end
 
-CAmalgamatorNamesapce amalgamator;
+#define RESET "\033[0m"
+#define BLACK "\033[30m"
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN "\033[36m"
+#define WHITE "\033[37m"
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+
+#define SRC_FLAG_NOT_PROVIDED RED "src flag not provided\n" RESET
+#define TAG_FLAG_NOT_PROVIDED RED "tag flag not provided\n" RESET
+#define SRC_ITS_NOT_A_DIR RED "src flag its not a dir\n" RESET
+#define AT_LEAST_ONE_TAG_ERROR RED "at least one tag must be provided\n" RESET
+#define FLAG_COLLIDES_ERROR RED "flag %s collides with flag %s\n" RESET
+
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
+#define SRC_FLAG "s | src | source"
+#define IMPORT_FLAG "i | i mportdir"
+#define TAG_FLAG "t | tags"
+#define PROJECT_SHORT_CUT_FLAG "p | project_short_cut"
+#define IMPLEMENT_MAIN_FLAG "m | implement_main"
+#define MAIN_NAME_FLAG "n | main_name"
+#define MAIN_PATH_FLAG "p | main_path"
+#define SLEEP_TIME_FLAG "s | sleep_time"
+#define WATCH_FLAG "w | watch"
+#define HELP_FLAG "h | help"
+
+#define SRC_DESCRIPTION "The folder of the project(required)"
+#define IMPORT_DESCRIPTION "The directory to be used to save imports (default: imports)"
+#define TAG_DESCRIPTION "The tags to be used (required)"
+#define PROJECT_SHORT_CUT_DESCRIPTION "The project short cut to be used in #ifndef props (default: silverchain)"
+#define IMPLEMENT_MAIN_DESCRIPTION "true or false to implement the main function (default: false)"
+#define MAIN_NAME_DESCRIPTION "The name of the main function (default: main.c or main.cpp)"
+#define MAIN_PATH_DESCRIPTION "The path of the main function (default: not set)"
+#define HELP_DESCRIPTION "Show the help message"
+#define WATCH_DESCRIPTION "Watch the project and generate the code when the project changes"
+#define SLEEP_TIME_DESCRIPTION "The time to sleep between each check (default: 0)"
+#define HELP_MESSAGE "Usage: silverchain [options]\nOptions:" \
+BLUE"\n  -h, --help\t\t\t" GREEN HELP_DESCRIPTION RESET  \
+BLUE"\n  -s, --src\t\t\t" GREEN SRC_DESCRIPTION RESET \
+BLUE"\n  -i, --importdir\t\t" GREEN IMPORT_DESCRIPTION RESET \
+BLUE"\n  -t, --tags\t\t\t" GREEN TAG_DESCRIPTION RESET \
+BLUE"\n  -p, --project_short_cut\t" GREEN PROJECT_SHORT_CUT_DESCRIPTION RESET \
+BLUE"\n  -m, --implement_main\t\t" GREEN IMPLEMENT_MAIN_DESCRIPTION RESET \
+BLUE"\n  -n, --main_name\t\t" GREEN MAIN_NAME_DESCRIPTION RESET \
+BLUE"\n  -p, --main_path\t\t" GREEN MAIN_PATH_DESCRIPTION RESET \
+BLUE"\n  -w, --watch\t\t\t" GREEN WATCH_DESCRIPTION RESET \
+BLUE"\n  -s, --sleep_time\t\t" GREEN SLEEP_TIME_DESCRIPTION RESET \
+"\n"
+
+#endif
+
+#ifndef silverchain_cli_globals
+#define silverchain_cli_globals
+
+//silver_chain_scope_start
+//mannaged by silver chain
+
+//silver_chain_scope_end
+
 CliNamespace cli;
+
+SilverChainNamespace silverchain;
 DtwNamespace dtw;
+CTextStackModule stack;
 
 #endif
 
-#ifndef camalgamator_cli_declare
-#define camalgamator_cli_declare
+#ifndef silverchain_cli_declare
+#define silverchain_cli_declare
 
 //silver_chain_scope_start
 //mannaged by silver chain
 
 //silver_chain_scope_end
 
-bool is_inside(const char *file,DtwStringArray *source);
-
-short generator_handler(const char *filename,const  char *import_name, void *extra_args);
-
-int collect_flag(CliFlag *flag,DtwStringArray *source);
+FlagColision flag_collides(SilverChainStringArray *flags_r);
 
 #endif
 
-#ifndef camalgamator_cli_define
-#define camalgamator_cli_define
+#ifndef silverchain_cli_define
+#define silverchain_cli_define
 
 //silver_chain_scope_start
 //mannaged by silver chain
 
 //silver_chain_scope_end
 
-bool is_inside(const char *file,DtwStringArray *source){
-    for(int i = 0; i < source->size; i++){
-        char *current = source->strings[i];
-
-        if(dtw_starts_with(file,current)){
-            return  true;
+FlagColision flag_collides(SilverChainStringArray *flags_r){
+    FlagColision colision = {false,NULL,NULL};
+    DtwStringArray *flags = (DtwStringArray*)flags_r;
+    for(int i = 0; i < flags->size; i++){
+        char *current_flag = flags->strings[i];
+        for(int j = 0; j < flags->size; j++){
+            if(i == j){
+                continue;
+            }
+            char *current_flag2 = flags->strings[j];
+            if(dtw_starts_with(current_flag2,current_flag)){
+                colision.collides = true;
+                colision.flag_colliding = current_flag;
+                colision.flag_colliding_with = current_flag2;
+                return colision;
+            }
         }
     }
-    return  false;
-}
-short generator_handler(const char *filename,const  char *import_name, void *extra_args){
-    Behaviors * behavior = (Behaviors*)extra_args;
-    char *absolute_file  = dtw.get_absolute_path(filename);
-    if(absolute_file == NULL){
-        return amalgamator.UNEXPECTED_ERROR;
-    }
-
-    if(is_inside(absolute_file,behavior->dont_change)){
-        free(absolute_file);
-        return  amalgamator.DONT_CHANGE;
-    }
-    if(is_inside(absolute_file, behavior->dont_include)){
-        free(absolute_file);
-        return  amalgamator.DONT_INCLUDE;
-    }
-    if(is_inside(absolute_file, behavior->include_perpetual)){
-        free(absolute_file);
-        return amalgamator.INCLUDE_PERPETUAL;
-    }
-    free(absolute_file);
-    return  amalgamator.INCLUDE_ONCE;
-}
-
-int  collect_flag(CliFlag *flag,DtwStringArray *source){
-    if(flag->exist == false){
-        return amalgamator.NO_ERRORS;
-    }
-    for(int i = 0; i < flag->size;i++){
-        char *current = cli.flag.get_str(flag,i,false);
-        char *current_absolute = dtw.get_absolute_path(current);
-        if(current_absolute == NULL){
-            return amalgamator.UNEXPECTED_ERROR;
-        }
-        dtw.string_array.append(source,current_absolute);
-        free(current_absolute);
-    }
-    return  amalgamator.NO_ERRORS;
+    return colision;
 }
 
 #endif
@@ -18779,113 +19195,119 @@ int  collect_flag(CliFlag *flag,DtwStringArray *source){
 
 
 
-int main(int argc, char *argv[]){
-    cli = newCliNamespace();
-    amalgamator = newCAmalgamatorNamesapce();
+int main(int argc,char *argv[]){
+
     dtw = newDtwNamespace();
+    stack = newCTextStackModule();
+    cli = newCliNamespace();
+    silverchain = newSilverChainNamespace();
     UniversalGarbage *garbage = newUniversalGarbage();
-    CliEntry* entry = newCliEntry(argc,argv);
-    UniversalGarbage_add(garbage, cli.entry.free, entry);
 
-    CliFlag *file = cli.entry.get_flag(entry,"f | file",CLI_NOT_CASE_SENSITIVE);
+    CliEntry *entry = newCliEntry(argc,argv);
+    UniversalGarbage_add(garbage,cli.entry.free,entry);
 
-    if(!file->exist){
-          printf(" entrie  file not provided \n");
-          UniversalGarbage_free(garbage);
-          return 1;
-    }
-    if(file->size == 0){
-        printf("file flag its empty\n");
-        UniversalGarbage_free(garbage);
-        return 1;
-    }
-    char *filename =  cli.flag.get_str(file,0,CLI_NOT_CASE_SENSITIVE);
-    CliFlag *output_flag = cli.entry.get_flag(entry,"o | out | output",CLI_NOT_CASE_SENSITIVE);
-    if(!output_flag->exist){
-        printf("you didint passed the output file\n");
+    CliFlag *help_flag = cli.entry.get_flag(entry,HELP_FLAG,CLI_NOT_CASE_SENSITIVE);
+    if(help_flag->exist){
+        printf(HELP_MESSAGE);
         UniversalGarbage_free(garbage);
         return 1;
     }
 
-    if(output_flag->size == 0){
-        printf("output flag its empty\n");
-        UniversalGarbage_free(garbage);
-        return 1;
-    }
-    long max_size  = amalgamator.ONE_MB * 100;
-    CliFlag *max_bytes = cli.entry.get_flag(entry,"maxbyte",CLI_NOT_CASE_SENSITIVE);
-    if(max_bytes->size > 0){
-        max_size = cli.flag.get_long(max_bytes,0);
-    }
-    if(max_size == -1){
-        printf("max bytes its not a number\n");
-        UniversalGarbage_free(garbage);
-        return 1;
+    CliFlag *src_flag = cli.entry.get_flag(entry,SRC_FLAG,CLI_NOT_CASE_SENSITIVE);
+
+    //verify if exist
+    if(src_flag->exist == false){
+           printf(SRC_FLAG_NOT_PROVIDED);
+           UniversalGarbage_free(garbage);
+           return 1;
     }
 
-    CliFlag *max_mega = cli.entry.get_flag(entry,"maxmega",CLI_NOT_CASE_SENSITIVE);
-    if(max_mega->size > 0){
-        max_size = cli.flag.get_long(max_mega,0);
-    }
-    if(max_size == -1){
-        printf("max mega its not a number\n");
+    char *src = cli.flag.get_str(src_flag,0,CLI_CASE_SENSITIVE);
+    if(dtw.entity_type(src) != DTW_FOLDER_TYPE){
+        printf(SRC_ITS_NOT_A_DIR);
         UniversalGarbage_free(garbage);
         return 1;
     }
 
-    int max_recursion = 1000;
-    CliFlag * max_recursion_flag = cli.entry.get_flag(entry,"maxreq",CLI_NOT_CASE_SENSITIVE);
-    if(max_recursion_flag->size > 0){
-        max_recursion = cli.flag.get_long(max_recursion_flag,0);
+    CliFlag *imports_flag = cli.entry.get_flag(entry,IMPORT_FLAG,CLI_NOT_CASE_SENSITIVE);
+
+
+    char *imports = NULL;
+    if(imports_flag->exist){
+        imports =cli.flag.get_str(imports_flag,0,CLI_CASE_SENSITIVE);
+    }
+    if(!imports_flag->exist){
+        imports  = dtw.concat_path(src,IMPORT_NAME);
+        UniversalGarbage_add_simple(garbage,imports);
     }
 
-    if(max_recursion == -1){
-        printf("max recursin its not a number\n");
+    CliFlag *tag_flags = cli.entry.get_flag(entry,TAG_FLAG,CLI_NOT_CASE_SENSITIVE);
+
+    if(!tag_flags->exist){
+        printf(TAG_FLAG_NOT_PROVIDED);
+        UniversalGarbage_free(garbage);
+        return 1;
+    }
+
+    if(tag_flags->size == 0){
+        printf(AT_LEAST_ONE_TAG_ERROR);
         UniversalGarbage_free(garbage);
         return 1;
     }
 
 
-    char *output_file = cli.flag.get_str(output_flag,0,CLI_NOT_CASE_SENSITIVE);
+    SilverChainStringArray *tags = silverchain.string_array.create();
+    UniversalGarbage_add(garbage,silverchain.string_array.free,tags);
 
-    Behaviors  behaviors = {0};
-
-    behaviors.dont_change = newDtwStringArray();
-    UniversalGarbage_add(garbage, dtw.string_array.free,  behaviors.dont_change );
-    if(collect_flag(cli.entry.get_flag(entry,"nochange | nc",CLI_NOT_CASE_SENSITIVE), behaviors.dont_change)){
-            UniversalGarbage_free(garbage);
-            return 1;
+    for(int i = 0; i < tag_flags->size;i++){
+        char *tag = cli.flag.get_str(tag_flags,i,CLI_CASE_SENSITIVE);
+        silverchain.string_array.append(tags,tag);
     }
 
-    behaviors.dont_include = newDtwStringArray();
-    UniversalGarbage_add(garbage, dtw.string_array.free,   behaviors.dont_include);
-    if(collect_flag(cli.entry.get_flag(entry,"noinclude | ni",CLI_NOT_CASE_SENSITIVE), behaviors.dont_include)){
+    FlagColision possible_colision = flag_collides(tags);
+    if(possible_colision.collides){
+        printf(FLAG_COLLIDES_ERROR,possible_colision.flag_colliding,possible_colision.flag_colliding_with);
         UniversalGarbage_free(garbage);
         return 1;
     }
 
-    behaviors.include_perpetual = newDtwStringArray();
-    UniversalGarbage_add(garbage, dtw.string_array.free,   behaviors.include_perpetual);
-    if(collect_flag(cli.entry.get_flag(entry,"perpetual | p",false), behaviors.include_perpetual)){
-        UniversalGarbage_free(garbage);
-        return 1;
+    CliFlag *project_short_cut_flag = cli.entry.get_flag(entry,PROJECT_SHORT_CUT_FLAG,CLI_NOT_CASE_SENSITIVE);
+    const char *project_short_cut = PROJECT_SHORT_CUT_DEFAULT;
+
+    if(project_short_cut_flag->exist){
+        project_short_cut = cli.flag.get_str(project_short_cut_flag,0,CLI_CASE_SENSITIVE);
+    }
+    bool implement_main = true;
+    char *main_name = NULL;
+    char *main_path = NULL;
+
+    CliFlag *implement_main_flag = cli.entry.get_flag(entry,IMPLEMENT_MAIN_FLAG,CLI_NOT_CASE_SENSITIVE);
+    if(implement_main_flag->exist){
+        implement_main = cli.flag.get_bool(implement_main_flag,0);
+    }
+    CliFlag *main_name_flag = cli.entry.get_flag(entry,MAIN_NAME_FLAG,CLI_NOT_CASE_SENSITIVE);
+    if(main_name_flag->exist){
+        main_name = cli.flag.get_str(main_name_flag,0,CLI_CASE_SENSITIVE);
+    }
+    CliFlag *main_path_flag = cli.entry.get_flag(entry,MAIN_PATH_FLAG,CLI_NOT_CASE_SENSITIVE);
+    if(main_path_flag->exist){
+        main_path = cli.flag.get_str(main_path_flag,0,CLI_CASE_SENSITIVE);
     }
 
-    CAmalgamatorErrorOrContent *error_or_content = amalgamator.generate_amalgamation(
-          filename,
-          max_size,
-          max_recursion,
-          generator_handler,
-          (void*)&behaviors
-      );
-
-    UniversalGarbage_add(garbage,amalgamator.free_error_or_string,error_or_content);
-    if(error_or_content->error){
-        printf("%s\n",error_or_content->error_msg);
-        UniversalGarbage_free(garbage);
-        return 1;
+    CliFlag *watch_flag = cli.entry.get_flag(entry,WATCH_FLAG,CLI_NOT_CASE_SENSITIVE);
+    if(watch_flag->exist){
+            CliFlag *sleep_time_flag = cli.entry.get_flag(entry,SLEEP_TIME_FLAG,CLI_NOT_CASE_SENSITIVE);
+        int sleep_time = SLEEP_TIME_DEFAULT;
+        if(sleep_time_flag->exist){
+            sleep_time = cli.flag.get_long(sleep_time_flag,0);
+        }
+        silverchain.generator.generate_code_in_watch_mode(src,imports,project_short_cut,tags,implement_main,main_name,main_path,sleep_time);
     }
-    dtw.write_string_file_content(output_file,error_or_content->content);
+
+    if(!watch_flag->exist){
+        silverchain.generator.generate_code(src,imports,project_short_cut,tags,implement_main,main_name,main_path);
+    }
+
     UniversalGarbage_free(garbage);
-    return 0;
+
 }
