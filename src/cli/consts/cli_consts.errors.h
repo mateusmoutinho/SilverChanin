@@ -5,7 +5,6 @@
 //silver_chain_scope_end
 
 
-#define FILE_NOT_PROVIDED_ERROR RED "file %s not provides  end scope\n" RESET
 #define SRC_FLAG_NOT_PROVIDED RED "src flag not provided\n" RESET
 #define TAG_FLAG_NOT_PROVIDED RED "tag flag not provided\n" RESET
 #define SRC_ITS_NOT_A_DIR RED "src flag its not a dir\n" RESET

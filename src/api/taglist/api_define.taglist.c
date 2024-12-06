@@ -46,7 +46,7 @@ int private_SilverChain_TagList_ordanate_tag_by_priority(const void *tag1,const 
     //ordenate by alphabet
     return strcmp(t1->name,t2->name);
 }
-void private_SilverChain_TagList_implement(private_SilverChain_TagList *self,const char *point,const char *project_short_cut){
+SilverChainError *   private_SilverChain_TagList_implement(private_SilverChain_TagList *self,const char *point,const char *project_short_cut){
 
 
     qsort(self->tags, self->size, sizeof(private_SilverChain_Tag*), private_SilverChain_TagList_ordanate_tag_by_priority);
@@ -58,8 +58,12 @@ void private_SilverChain_TagList_implement(private_SilverChain_TagList *self,con
             prev = self->tags[i-1]->name;
         }
 
-        private_SilverChain_Tag_implement(current,point,project_short_cut,prev);
+        SilverChainError * error = private_SilverChain_Tag_implement(current,point,project_short_cut,prev);
+        if(error){
+            return error;
+        }
     }
+    return NULL;
 }
 
 void private_SilverChain_TagList_free(private_SilverChain_TagList *self){

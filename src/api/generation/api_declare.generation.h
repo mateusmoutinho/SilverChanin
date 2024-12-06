@@ -7,7 +7,7 @@
 
 char *private_SilverChain_get_main_path(DtwStringArray *src_listage,char *main_name);
 
-void private_SilverChain_generate_main(
+SilverChainError * private_SilverChain_generate_main(
     DtwStringArray *src_listage,
     const char *import_dir,
     private_SilverChain_TagList *itens,
@@ -17,7 +17,7 @@ void private_SilverChain_generate_main(
 );
 
 
-void SilverChain_generate_code(
+SilverChainError * SilverChain_generate_code(
     const char *src,
     const char *import_dir,
     const char *project_short_cut,

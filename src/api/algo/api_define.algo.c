@@ -16,7 +16,7 @@ int  private_SilverChain_get_tag_index(DtwStringArray *tags,const char *name){
         }
 
     }
-    return -1;
+    return SILVER_CHAIN_NOT_FOUND;
 }
 
 

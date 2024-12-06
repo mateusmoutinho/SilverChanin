@@ -14,6 +14,6 @@ int private_SilverChain_TagList_ordanate_tag_by_priority(const void *tag1,const 
 
 void private_SilverChain_TagList_add_item(private_SilverChain_TagList *self, const char *tag,const char *path,int priority);
 
-void private_SilverChain_TagList_implement(private_SilverChain_TagList *self,const char *point,const char *project_short_cut);
+SilverChainError *   private_SilverChain_TagList_implement(private_SilverChain_TagList *self,const char *point,const char *project_short_cut);
 
 void private_SilverChain_TagList_free(private_SilverChain_TagList *self);

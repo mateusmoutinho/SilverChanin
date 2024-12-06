@@ -17,9 +17,9 @@ void private_SilverChain_Tag_create_module_file(
     const char *project_short_cut
 );
 
-int  private_SilverChain_replace_import_file(const char *current_file_path,const char *module_path);
+SilverChainError *   private_SilverChain_replace_import_file(const char *current_file_path,const char *module_path);
 
-void private_SilverChain_Tag_replace_import_in_files(
+SilverChainError * private_SilverChain_Tag_replace_import_in_files(
     private_SilverChain_Tag *self,
     const char *module_dir,
     const char *prev
@@ -27,7 +27,7 @@ void private_SilverChain_Tag_replace_import_in_files(
 
 
 
-void private_SilverChain_Tag_implement(
+SilverChainError *   private_SilverChain_Tag_implement(
     private_SilverChain_Tag *self,
     const char *module_dir,
     const char *project_short_cut,

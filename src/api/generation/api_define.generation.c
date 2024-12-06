@@ -35,7 +35,7 @@ char *private_SilverChain_get_main_path(DtwStringArray *src_listage,char *main_n
     UniversalGarbage_free(garbage);
     return NULL;
 }
-void private_SilverChain_generate_main(
+SilverChainError * private_SilverChain_generate_main(
     DtwStringArray *src_listage,
     const char *import_dir,
     private_SilverChain_TagList *itens,
@@ -49,7 +49,7 @@ void private_SilverChain_generate_main(
     }
 
     if(found_main_path == NULL){
-        return;
+        return NULL;
     }
 
     UniversalGarbage *garbage = newUniversalGarbage();
@@ -60,12 +60,12 @@ void private_SilverChain_generate_main(
     UniversalGarbage_add(garbage,CTextStack_free,module_path);
 
     CTextStack_format(module_path,"%s/%s.%s.h",import_dir,IMPORT_NAME,prev);
-    private_SilverChain_replace_import_file(found_main_path,module_path->rendered_text);
+    SilverChainError *error = private_SilverChain_replace_import_file(found_main_path,module_path->rendered_text);
     UniversalGarbage_free(garbage);
-
+    return error;
 }
 
-void SilverChain_generate_code(
+SilverChainError * SilverChain_generate_code(
     const char *src,
     const char *import_dir,
     const char *project_short_cut,
@@ -106,22 +106,27 @@ void SilverChain_generate_code(
         CTextStack_self_substr(name_stack,0,first_dot);
 
         int tag_index = private_SilverChain_get_tag_index((DtwStringArray*)tags,name_stack->rendered_text);
-        if(tag_index != -1){
+        if(tag_index != SILVER_CHAIN_NOT_FOUND){
             private_SilverChain_TagList_add_item(itens,name_stack->rendered_text,current,tag_index);
         }
 
     }
 
-    private_SilverChain_TagList_implement(itens,import_dir,project_short_cut);
+    SilverChainError *error =  private_SilverChain_TagList_implement(itens,import_dir,project_short_cut);
+    if(error){
+        UniversalGarbage_free(garbage);
+        return error;
+    }
     if(implement_main){
-       private_SilverChain_generate_main(src_listage,import_dir,itens,main_name,main_path);
+      error =  private_SilverChain_generate_main(src_listage,import_dir,itens,main_name,main_path);
     }
 
     UniversalGarbage_free(garbage);
+    return error;
 }
 
 
-void SilverChain_generate_code_in_watch_mode(
+void  SilverChain_generate_code_in_watch_mode(
     const char *src,
     const char *import_dir,
     const char *project_short_cut,
@@ -154,7 +159,12 @@ void SilverChain_generate_code_in_watch_mode(
                 printf("%s\n",remaking_message);
             }
 
-            SilverChain_generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
+            SilverChainError * error =  SilverChain_generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
+            if(error){
+                printf("%s\n",error->error_msg);
+                SilverChainError_free(error);
+                continue;
+            }
             if(whatch_message){
                 printf("%s\n",whatch_message);
             }
