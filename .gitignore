@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
 release
+teste.c
 SilverChain
 dependencies
 container
