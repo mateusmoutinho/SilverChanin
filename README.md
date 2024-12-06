@@ -53,3 +53,5 @@ each tag can visualize the all the ancestors tags, for example:
 ```
 
 in this case the "func_declaration" and "func_definition" tags will see the "dependencies" and "consts" .
+
+## Api Usage
