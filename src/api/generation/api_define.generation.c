@@ -134,15 +134,13 @@ void  SilverChain_generate_code_in_watch_mode(
     bool implement_main,
     char *main_name,
     const char *main_path,
-    int sleep_time,
-    const char *whatch_message,
-    const char *remaking_message
+    int sleep_time
 
 ){
     char *first = NULL;
     SilverChain_generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
-    if(whatch_message){
-        printf("%s\n",whatch_message);
+    if(SILVER_CHAIN_WATCHING_FILES_MESSAGE){
+        printf("%s\n",SILVER_CHAIN_WATCHING_FILES_MESSAGE);
     }
 
     while (true) {
@@ -155,8 +153,8 @@ void  SilverChain_generate_code_in_watch_mode(
         }
 
         if(strcmp(hash->hash,first) != 0){
-            if(remaking_message){
-                printf("%s\n",remaking_message);
+            if(SILVER_CHAIN_REMAKING_PROJECT_MESSAGE){
+                printf("%s\n",SILVER_CHAIN_REMAKING_PROJECT_MESSAGE);
             }
 
             SilverChainError * error =  SilverChain_generate_code(src,import_dir,project_short_cut,tags,implement_main,main_name,main_path);
@@ -165,9 +163,10 @@ void  SilverChain_generate_code_in_watch_mode(
                 SilverChainError_free(error);
                 continue;
             }
-            if(whatch_message){
-                printf("%s\n",whatch_message);
+            if(SILVER_CHAIN_WATCHING_FILES_MESSAGE){
+                printf("%s\n",SILVER_CHAIN_WATCHING_FILES_MESSAGE);
             }
+
             free(first);
             first = NULL;
         }

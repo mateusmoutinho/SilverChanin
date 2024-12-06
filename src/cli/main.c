@@ -111,7 +111,7 @@ int main(int argc,char *argv[]){
         if(sleep_time_flag->exist){
             sleep_time = cli.flag.get_long(sleep_time_flag,0);
         }
-        SilverChain_generate_code_in_watch_mode(src,imports,project_short_cut,tags,implement_main,main_name,main_path,sleep_time,WATCHING_FILES_MESSAGE,REMAKING_PROJECT_MESSAGE);
+        SilverChain_generate_code_in_watch_mode(src,imports,project_short_cut,tags,implement_main,main_name,main_path,sleep_time);
     }
 
     if(!watch_flag->exist){

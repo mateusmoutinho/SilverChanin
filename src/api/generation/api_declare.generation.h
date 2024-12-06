@@ -35,8 +35,5 @@ void SilverChain_generate_code_in_watch_mode(
         bool implement_main,
         char *main_name,
         const char *main_path,
-        int sleep_time,
-        const char *whatch_message,
-        const char *remaking_message
-
+        int sleep_time
 );
