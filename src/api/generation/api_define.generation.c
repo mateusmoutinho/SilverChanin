@@ -2,6 +2,7 @@
 //silver_chain_scope_start
 //mannaged by silver chain
 #include "../../imports/imports.api_declare.h"
+#include <stdbool.h>
 //silver_chain_scope_end
 
 char *private_SilverChain_get_main_path(DtwStringArray *src_listage,char *main_name){
@@ -76,7 +77,6 @@ SilverChainError * SilverChain_generate_code(
     ){
 
 
-    dtw_remove_any(import_dir);
     UniversalGarbage *garbage = newUniversalGarbage();
     DtwStringArray *src_listage = dtw_list_files_recursively(src,true);
     //grants previsbility
@@ -120,6 +120,26 @@ SilverChainError * SilverChain_generate_code(
     if(implement_main){
       error =  private_SilverChain_generate_main(src_listage,import_dir,itens,main_name,main_path);
     }
+
+    DtwStringArray * valid_import_dirs  = newDtwStringArray();
+    UniversalGarbage_add(garbage, DtwStringArray_free, valid_import_dirs);
+    for(int i = 0;i < tags->size; i++){
+        char *formmated_str  = private_dtw_formatt("imports.%s.h",tags->size);
+        DtwStringArray_append_getting_ownership(valid_import_dirs, formmated_str);
+    }
+
+    DtwStringArray * import_files = dtw_list_files_recursively(import_dir, DTW_NOT_CONCAT_PATH);
+    for(int i = 0; i < import_files->size;i++){
+        char *current_file = import_files->strings[i];
+        bool valid = DtwStringArray_find_position(valid_import_dirs,current_file) != -1;
+        if(!valid){
+            char *current_file_path = dtw_concat_path(import_dir,current_file);
+            dtw_remove_any(current_file_path);
+            free(current_file);
+        }
+    }
+
+
 
     UniversalGarbage_free(garbage);
     return error;
