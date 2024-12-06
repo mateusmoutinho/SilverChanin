@@ -1,8 +1,9 @@
 # Prerequisites
 *.d
+ CAmalgamator.c
+ SilverChain.c
 release
 teste.c
-SilverChain
 dependencies
 container
 # Object files
