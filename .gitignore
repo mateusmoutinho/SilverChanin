@@ -3,6 +3,7 @@
 CAmalgamator.c
 SilverChain.c
 release
+src/imports
 teste.c
 dependencies
 container
