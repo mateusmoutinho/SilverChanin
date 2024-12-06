@@ -12,7 +12,7 @@ typedef struct SilverChainGeneratorNamespace{
         const char *project_short_cut,
         SilverChainStringArray * tags,
         bool implement_main,
-        char *main_name,
+        const char *main_name,
         const char *main_path
         );
 
@@ -22,7 +22,7 @@ typedef struct SilverChainGeneratorNamespace{
             const char *project_short_cut,
             SilverChainStringArray *tags,
             bool implement_main,
-            char *main_name,
+            const char *main_name,
             const char *main_path,
             int sleep_time
     );
