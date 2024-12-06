@@ -124,11 +124,14 @@ SilverChainError * SilverChain_generate_code(
 
 
     DtwStringArray * import_files = dtw_list_files_recursively(import_dir, DTW_CONCAT_PATH);
+    UniversalGarbage_add(garbage, DtwStringArray_free, import_files);
+
     for(int i = 0; i < import_files->size;i++){
         UniversalGarbage *internal_garbage = newUniversalGarbage();
         char *current_file = import_files->strings[i];
         DtwPath *current_path = newDtwPath(current_file);
         UniversalGarbage_add(internal_garbage, DtwPath_free, current_path);
+
         char *full_name = DtwPath_get_full_name(current_path);
 
         if(!dtw_starts_with(full_name, "imports.")){
