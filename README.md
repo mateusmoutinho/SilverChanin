@@ -55,3 +55,57 @@ each tag can visualize the all the ancestors tags, for example:
 in this case the "func_declaration" and "func_definition" tags will see the "dependencies" and "consts" .
 
 ## Api Usage
+if you want to integrate silver chain into your build system, you can use it
+directly in c.
+
+install **SilverChainApiOne** file by typing:
+```shel
+curl -L https://github.com/OUIsolutions/SilverChain/releases/download/v0.07/SilverChainApiOne.h -o SilverChainApiOne.h
+
+```
+
+then you can use the api like these:
+```c
+#include "SilverChainApiOne.h"
+SilverChainNamespace sc;
+
+int main(){
+    sc = newSilverChainNamespace();
+
+    SilverChainStringArray * tags = sc.string_array.create();
+    sc.string_array.append(tags,"api_dependencies");
+    sc.string_array.append(tags,"api_const");
+    sc.string_array.append(tags,"api_type");
+    sc.string_array.append(tags,"api_declare");
+    sc.string_array.append(tags,"api_define");
+    sc.string_array.append(tags,"cli_dependencies");
+    sc.string_array.append(tags,"cli_consts");
+    sc.string_array.append(tags,"cli_type");
+    sc.string_array.append(tags,"cli_globals");
+    sc.string_array.append(tags,"cli_declare");
+    sc.string_array.append(tags,"cli_define");
+
+    const char *src = "src";
+    const char *import_dir = "src/imports";
+    const char *project_short_cut = "SilverChain";
+    bool implement_main = true;
+    const char *main_name = "main.c";
+    // these its not required when you have only one main
+    const char *main_path = "src/cli/main.c";
+    SilverChainError *possible_error = sc.generator.generate_code(
+        src,
+        import_dir,
+        project_short_cut,
+        tags,
+        implement_main,
+        main_name,
+        main_path
+    );
+    if(possible_error){
+        printf("%s\n",possible_error->error_msg);
+        sc.error.free(possible_error);
+    }
+    sc.string_array.free(tags);
+}
+
+```
