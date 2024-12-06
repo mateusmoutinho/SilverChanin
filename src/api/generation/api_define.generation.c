@@ -131,10 +131,10 @@ SilverChainError * SilverChain_generate_code(
     DtwStringArray * import_files = dtw_list_files_recursively(import_dir, DTW_NOT_CONCAT_PATH);
     for(int i = 0; i < import_files->size;i++){
         char *current_file = import_files->strings[i];
-        bool valid = DtwStringArray_find_position(valid_import_dirs,current_file) != -1;
+        bool valid = private_SilverChain_get_tag_index(valid_import_dirs,current_file) != -1;
         if(!valid){
             char *current_file_path = dtw_concat_path(import_dir,current_file);
-           // dtw_remove_any(current_file_path);
+            dtw_remove_any(current_file_path);
             free(current_file);
         }
     }
