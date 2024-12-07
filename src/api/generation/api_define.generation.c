@@ -75,6 +75,10 @@ SilverChainError * SilverChain_generate_code(
     const char *main_path
     ){
 
+    if(dtw_entity_type(src) != DTW_FOLDER_TYPE){
+        return private_SilverChain_newSilverChainError(SILVER_CHAIN_SRC_NOT_A_DIR,NULL,SILVER_CHAIN_SRC_NOT_A_DIR_MESSAGE,src);
+    }
+
 
     UniversalGarbage *garbage = newUniversalGarbage();
     DtwStringArray *src_listage = dtw_list_files_recursively(src,true);
